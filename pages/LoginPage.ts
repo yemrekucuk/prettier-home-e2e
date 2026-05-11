@@ -1,24 +1,31 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
-export class LoginPage {
-    readonly page: Page;
+export class LoginPage extends BasePage{
+    
     readonly emailInput: Locator;
     readonly passwordInput: Locator;
     readonly loginButton: Locator;
 
-    // Constructor: Obje üretildiğinde ilk çalışan blok
     constructor(page: Page) {
-        this.page = page;
-        // Locator'ları tanımlıyoruz. Genelde email ve password formlarında "name" attribute'u kullanılır.
-        this.emailInput = page.locator('input[name="email"]'); 
+        super(page)
+        
+        this.emailInput = page.locator('input[name="email"]');
         this.passwordInput = page.locator('input[name="password"]');
-        this.loginButton = page.locator('button[type="submit"]'); // Tıklanacak buton
+        this.loginButton = page.locator('button[type="submit"]');
     }
 
-    // Ortak Login Methodu - Dışarıdan email ve password alacak şekilde bekliyor
-    async login(email: string , password: string) {
+    async login(email: string, password: string) {
         await this.emailInput.fill(email);
         await this.passwordInput.fill(password);
         await this.loginButton.click();
+    }
+
+    async loginAsAdmin() {
+        await this.login(process.env.ADMIN_EMAIL as string, process.env.ADMIN_PASSWORD as string);
+    }
+
+    async loginAsManager() {
+        await this.login(process.env.MANAGER_EMAIL as string, process.env.MANAGER_PASSWORD as string);
     }
 }

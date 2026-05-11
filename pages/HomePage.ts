@@ -20,7 +20,7 @@ export class HomePage extends BasePage {
     const buttonCategory = page.locator(".category-wrapper");
 
     this.searchBar = page.getByPlaceholder("Search");
-    this.searchButton = page.locator('input[name="query"] + button');
+    this.searchButton = page.locator('.search-input-wrapper button');
     this.rentButton = buttonAdvertType.locator("button").first();
     this.saleButton = buttonAdvertType.locator("button").nth(1);
     this.houseButton = buttonCategory.locator("button").first();

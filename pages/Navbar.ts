@@ -1,11 +1,13 @@
 import { Page, Locator } from "@playwright/test";
 
-export class BasePage {
+export class Navbar {
   readonly page: Page;
   readonly homeLink: Locator;
   readonly propertiesLink: Locator;
   readonly aboutLink: Locator;
   readonly contactLink: Locator;
+  readonly loginLink: Locator;
+  readonly registerLink: Locator;
   readonly languageDropdown: Locator;
   readonly propertyButton: Locator;
   readonly userLogo: Locator;
@@ -32,6 +34,8 @@ export class BasePage {
     this.propertiesLink = topMenu.locator('a.nav-link[href="/ad/search"]');
     this.aboutLink = topMenu.locator('a.nav-link[href="/about"]');
     this.contactLink = topMenu.locator('a.nav-link[href="/contact"]');
+    this.loginLink = topMenu.locator('a.nav-link[href="/login"]');
+    this.registerLink = topMenu.locator('a.nav-link[href="/register"]');
     this.languageDropdown = page.locator(
       "a.dropdown-toggle:has(img.flag-icon)",
     );
@@ -61,6 +65,12 @@ export class BasePage {
   }
   async clickContactLink() {
     await this.contactLink.click();
+  }
+  async clickLoginLink() {
+    await this.loginLink.click();
+  }
+  async clickRegisterLink() {
+    await this.registerLink.click();
   }
   async clickLanguageDropdown() {
     await this.languageDropdown.click();

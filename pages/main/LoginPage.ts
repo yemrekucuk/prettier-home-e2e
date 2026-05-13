@@ -1,7 +1,7 @@
 import { Page, Locator } from "@playwright/test";
-import { BasePage } from "../BasePage";
+import { Navbar } from "../Navbar";
 
-export class LoginPage extends BasePage{
+export class LoginPage extends Navbar{
     
     readonly emailInput: Locator;
     readonly passwordInput: Locator;

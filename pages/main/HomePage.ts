@@ -1,7 +1,7 @@
 import { Page, Locator } from "@playwright/test";
-import { Navbar } from "../Navbar";
+import { NavbarPage } from "../NavbarPage";
 
-export class HomePage extends Navbar {
+export class HomePage extends NavbarPage {
   readonly searchBar: Locator;
   readonly searchButton: Locator;
   readonly rentButton: Locator;
@@ -20,7 +20,7 @@ export class HomePage extends Navbar {
     const buttonCategory = page.locator(".category-wrapper");
 
     this.searchBar = page.getByPlaceholder("Search");
-    this.searchButton = page.locator('.search-input-wrapper button');
+    this.searchButton = page.locator(".search-input-wrapper button");
     this.rentButton = buttonAdvertType.locator("button").first();
     this.saleButton = buttonAdvertType.locator("button").nth(1);
     this.houseButton = buttonCategory.locator("button").first();

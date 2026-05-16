@@ -1,7 +1,7 @@
 import { Page, Locator } from "@playwright/test";
-import { Navbar } from "../Navbar";
+import { NavbarPage } from "../NavbarPage";
 
-export class MyAdvertsPage extends Navbar {
+export class MyAdvertsPage extends NavbarPage {
   constructor(page: Page) {
     super(page);
   }

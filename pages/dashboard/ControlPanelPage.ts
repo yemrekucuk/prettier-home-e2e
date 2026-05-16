@@ -1,4 +1,5 @@
 import { Page, Locator } from "@playwright/test";
+import { HomePage } from "../main/HomePage";
 
 export class ControlPanelPage {
   readonly page: Page;
@@ -61,6 +62,7 @@ export class ControlPanelPage {
   }
   async clickBackToSiteLink() {
     await this.backToSiteLink.click();
+    return new HomePage(this.page);
   }
   async clickLogoutButton() {
     await this.logoutButton.click();

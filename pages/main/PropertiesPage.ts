@@ -1,5 +1,5 @@
 import { Page, expect } from "@playwright/test";
-import { NavbarPage } from "../NavbarPage";
+import { NavbarPage } from "./NavbarPage";
 import { FilterOptions } from "../../interfaces/filterOptions.interface";
 import { WaitUtils } from "../../utils/WaitUtils";
 

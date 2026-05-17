@@ -1,5 +1,5 @@
 import { Page, Locator } from "@playwright/test";
-import { NavbarPage } from "../NavbarPage";
+import { NavbarPage } from "./NavbarPage";
 
 export class LoginPage extends NavbarPage {
   readonly loginHeaderLink: Locator; // Formu açan link

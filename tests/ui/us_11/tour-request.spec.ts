@@ -1,5 +1,5 @@
 import { test, expect } from "../../../fixtures/propertiesFixtures";
-import { NavbarPage } from "../../../pages/NavbarPage";
+import { NavbarPage } from "../../../pages/main/NavbarPage";
 import {
   PROPERTIES_DATA,
   testData,

@@ -1,5 +1,5 @@
 import { Page, Locator } from "@playwright/test";
-import { NavbarPage } from "../NavbarPage";
+import { NavbarPage } from "./NavbarPage";
 import { InputUtils } from "../../utils/InputUtils";
 
 export class ListingDetailsPage extends NavbarPage {

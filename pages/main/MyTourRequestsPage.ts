@@ -1,5 +1,5 @@
 import { Page, Locator, expect } from "@playwright/test";
-import { NavbarPage } from "../NavbarPage";
+import { NavbarPage } from "./NavbarPage";
 import { WaitUtils } from "../../utils/WaitUtils";
 
 export class MyTourRequestsPage extends NavbarPage {

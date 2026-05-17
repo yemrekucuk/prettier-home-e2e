@@ -7,8 +7,6 @@ export class NavbarPage {
     this.page = page;
   }
 
-  // --- GETTERS (her çağrıldığında güncel DOM’dan locator üretir) ---
-
   get homeLink() {
     return this.page.locator('nav.top-nav-menu a.nav-link[href="/"]');
   }
@@ -25,6 +23,14 @@ export class NavbarPage {
 
   get contactLink() {
     return this.page.locator('nav.top-nav-menu a.nav-link[href="/contact"]');
+  }
+
+  get loginLink() {
+    return this.page.locator('nav.top-nav-menu a.nav-link[href="/login"]');
+  }
+
+  get registerLink() {
+    return this.page.locator('nav.top-nav-menu a.nav-link[href="/register"]');
   }
 
   get languageDropdown() {
@@ -83,8 +89,6 @@ export class NavbarPage {
     return this.page.locator("#subMenu a[href='/']");
   }
 
-  // --- CLICK METHODS (getter üzerinden çalışır → her zaman doğru elemente tıklar) ---
-
   async clickHomeLink() {
     await this.homeLink.click();
   }
@@ -99,6 +103,14 @@ export class NavbarPage {
 
   async clickContactLink() {
     await this.contactLink.click();
+  }
+
+  async clickLoginLink() {
+    await this.loginLink.click();
+  }
+
+  async clickRegisterLink() {
+    await this.registerLink.click();
   }
 
   async clickLanguageDropdown() {

@@ -9,7 +9,7 @@ export class LoginPage extends NavbarPage {
 
   constructor(page: Page) {
     super(page);
-    this.loginHeaderLink = page.getByRole("link", { name: "Login" });
+    this.loginHeaderLink = page.locator('a.nav-link').filter({ hasText: 'Login' });
     this.emailInput = page.locator('input[name="email"]');
     this.passwordInput = page.locator('input[name="password"]');
     this.loginButton = page.locator('button[type="submit"]');

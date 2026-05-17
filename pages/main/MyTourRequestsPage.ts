@@ -8,6 +8,9 @@ export class MyTourRequestsPage extends NavbarPage {
   readonly dateInput: Locator;
   readonly timeSelect: Locator;
   readonly updateButton: Locator;
+  readonly myResponsesTab: Locator;
+  readonly visibleRequestRows: Locator;
+  readonly activeStatusBadges: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -18,6 +21,14 @@ export class MyTourRequestsPage extends NavbarPage {
     this.dateInput = page.locator('input[name="tourDate"]');
     this.timeSelect = page.locator('select[name="tourTime"]');
     this.updateButton = page.getByRole("button", { name: "UPDATE" });
+
+    this.myResponsesTab = page.locator(
+      "button[data-rr-ui-event-key='response']",
+    );
+    this.visibleRequestRows = page.locator(".tab-pane.active table tbody tr");
+    this.activeStatusBadges = page.locator(
+      ".tab-pane.active table tbody tr span[data-pc-section='value']",
+    );
   }
 
   private getRowByPropertyName(propertyName: string) {
@@ -95,5 +106,31 @@ export class MyTourRequestsPage extends NavbarPage {
     const time = await row.locator("td").nth(4).innerText();
 
     return { date, time };
+  }
+
+  async clickMyResponsesTab() {
+    await this.myResponsesTab.click();
+    await expect(this.myResponsesTab).toHaveAttribute("aria-selected", "true");
+  }
+
+  getPendingRows() {
+    return this.visibleRequestRows.filter({
+      hasText: /(PENDING|BEKLEMEDE|EN ATTENTE|AUSSTEHEND|PENDIENTE)/i,
+    });
+  }
+  async managePendingRequest(action: "approve" | "reject") {
+    const firstPendingRow = this.getPendingRows().first();
+    await WaitUtils.waitForVisible(firstPendingRow);
+
+    if (action === "reject") {
+      await firstPendingRow.locator("button").first().click();
+    } else if (action === "approve") {
+      await firstPendingRow.locator("button").nth(1).click();
+    }
+
+    const confirmPopup = this.page.locator(".p-confirm-popup");
+    await confirmPopup.waitFor({ state: "visible" });
+
+    await confirmPopup.locator(".p-confirm-popup-accept").click({ force: true });
   }
 }

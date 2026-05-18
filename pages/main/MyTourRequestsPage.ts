@@ -11,6 +11,10 @@ export class MyTourRequestsPage extends NavbarPage {
   readonly myResponsesTab: Locator;
   readonly visibleRequestRows: Locator;
   readonly activeStatusBadges: Locator;
+  readonly pageTwoButton: Locator;
+  readonly previousPageButton: Locator;
+  readonly confirmPopup: Locator;
+  readonly emptyStateText = "No results found";
 
   constructor(page: Page) {
     super(page);
@@ -29,6 +33,14 @@ export class MyTourRequestsPage extends NavbarPage {
     this.activeStatusBadges = page.locator(
       ".tab-pane.active table tbody tr span[data-pc-section='value']",
     );
+    this.pageTwoButton = page
+      .locator("button[data-pc-section='pagebutton']")
+      .filter({ hasText: /^2$/ })
+      .first();
+    this.previousPageButton = page.locator(
+      ".tab-pane.active .p-paginator-bottom button[data-pc-section='prevpagebutton']",
+    );
+    this.confirmPopup = page.locator(".p-confirm-popup");
   }
 
   private getRowByPropertyName(propertyName: string) {
@@ -118,7 +130,10 @@ export class MyTourRequestsPage extends NavbarPage {
       hasText: /(PENDING|BEKLEMEDE|EN ATTENTE|AUSSTEHEND|PENDIENTE)/i,
     });
   }
-  async managePendingRequest(action: "approve" | "reject") {
+  async managePendingRequest(
+    action: "approve" | "reject",
+    confirmAction: "accept" | "cancel" = "accept",
+  ) {
     const firstPendingRow = this.getPendingRows().first();
     await WaitUtils.waitForVisible(firstPendingRow);
 
@@ -128,9 +143,23 @@ export class MyTourRequestsPage extends NavbarPage {
       await firstPendingRow.locator("button").nth(1).click();
     }
 
-    const confirmPopup = this.page.locator(".p-confirm-popup");
+    const confirmPopup = this.confirmPopup;
     await confirmPopup.waitFor({ state: "visible" });
 
-    await confirmPopup.locator(".p-confirm-popup-accept").click({ force: true });
+    if (confirmAction === "accept") {
+      await confirmPopup
+        .locator(".p-confirm-popup-accept")
+        .click({ force: true });
+    } else if (confirmAction === "cancel") {
+      await confirmPopup
+        .locator(".p-confirm-popup-reject")
+        .click({ force: true });
+    }
+  }
+  async clickPageTwo() {
+    await this.pageTwoButton.click();
+  }
+  async clickPreviousPageButton() {
+    await this.previousPageButton.click();
   }
 }

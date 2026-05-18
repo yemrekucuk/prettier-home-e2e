@@ -45,9 +45,8 @@ export class PropertiesPage extends NavbarPage {
     return this.page.getByLabel("City");
   }
 
-  // District dropdown React tarafından yeniden render edildiği için → .first()
   get districtSelect() {
-    return this.page.locator("select#dist").first();
+    return this.page.locator("//select[@id='dist']");
   }
 
   get searchButtonProperties() {
@@ -70,14 +69,12 @@ export class PropertiesPage extends NavbarPage {
   // ---------------------------
 
   async filterSearch(options: FilterOptions) {
-    if (options.advertType) {
-      await this.advertTypeSelect.selectOption(options.advertType);
+    // 1) Search keyword
+    if (options.searchInput) {
+      await this.searchInput.fill(options.searchInput);
     }
 
-    if (options.category) {
-      await this.categorySelect.selectOption(options.category);
-    }
-
+    // 2) Price Range
     if (options.minPrice !== undefined) {
       await this.minPriceInput.fill(options.minPrice);
     }
@@ -86,23 +83,45 @@ export class PropertiesPage extends NavbarPage {
       await this.maxPriceInput.fill(options.maxPrice);
     }
 
+    // 3) Advert Type
+    if (options.advertType) {
+      await this.advertTypeSelect.selectOption(options.advertType);
+    }
+
+    // 4) Category
+    if (options.category) {
+      await this.categorySelect.selectOption(options.category);
+    }
+
+    // 5) Country
     if (options.country) {
       await this.countrySelect.selectOption(options.country);
     }
 
+    //  6) CITY DROPDOWN YÜKLENMESİNİ BEKLE
+    await this.citySelect
+      .locator('option:not([value="-1"])')
+      .first()
+      .waitFor({ state: "attached", timeout: 10000 });
+
+    // 7) City
     if (options.city) {
       await this.citySelect.selectOption(options.city);
     }
 
-    if (options.district) {
-      // District dropdown React tarafından yeniden render edildiği için:
-      await this.page.waitForSelector("select#dist", { state: "attached" });
-      await this.districtSelect.waitFor({ state: "visible" });
+    // 8) DISTRICT DROPDOWN YÜKLENMESİNİ BEKLE
+    await this.districtSelect
+      .locator('option:not([value="-1"])')
+      .first()
+      .waitFor({ state: "attached", timeout: 10000 });
 
+    // 9) District
+    if (options.district) {
       await this.districtSelect.selectOption({ label: options.district });
     }
 
-    await WaitUtils.waitForVisible(this.searchButtonProperties);
+    // 10) Search Button
+    await this.searchButtonProperties.waitFor({ state: "visible" });
   }
 
   // ---------------------------
@@ -110,7 +129,11 @@ export class PropertiesPage extends NavbarPage {
   // ---------------------------
 
   async clickSearch() {
-    await this.searchButtonProperties.click();
+    const searchBtn = this.page.getByRole("button", { name: "Search" });
+
+    await searchBtn.waitFor({ state: "visible" });
+    await searchBtn.click();
+
     await this.listingCards.first().waitFor({ state: "visible" });
   }
 

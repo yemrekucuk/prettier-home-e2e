@@ -2,6 +2,7 @@ import { Locator, Page, expect } from "@playwright/test";
 import { NavbarPage } from "./NavbarPage";
 import { FilterOptions } from "../../interfaces/filterOptions.interface";
 import { WaitUtils } from "../../utils/WaitUtils";
+import searchData from "../../test-data/SearchData.json"
 
 export class PropertiesPage extends NavbarPage {
   readonly firstSearcedPropertie: Locator;
@@ -153,25 +154,25 @@ export class PropertiesPage extends NavbarPage {
   }
 
   async searchRentPropertiesWithSpesificDatas() {
-    await this.searchInput.fill("Office");
+    await this.searchInput.fill(searchData.searchInput);
 
-    await this.minPriceInput.fill("250000");
+    await this.minPriceInput.fill(searchData.minPrice);
 
-    await this.maxPriceInput.fill("400000");
+    await this.maxPriceInput.fill(searchData.maxPrice);
 
-    await this.advertTypeSelect.selectOption({ label: "Rent" });
+    await this.advertTypeSelect.selectOption({ label: searchData.advertType });
 
-    await this.categorySelect.selectOption({ label: "Office" });
+    await this.categorySelect.selectOption({ label: searchData.category });
 
-    await this.countrySelect.selectOption({ label: "Türkiye" });
+    await this.countrySelect.selectOption({ label: searchData.country });
 
-    await this.citySelect.selectOption({ label: "Bursa" });
+    await this.citySelect.selectOption({ label: searchData.city });
 
     await this.page.waitForSelector(
       'select[id="dist"] option:has-text("Nilüfer")',
       { state: "attached" },
     );
 
-    await this.districtSelect.selectOption({ label: "Nilüfer" });
+    await this.districtSelect.selectOption({ label: searchData.district });
   }
 }

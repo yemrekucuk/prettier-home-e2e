@@ -1,0 +1,10 @@
+{
+  "minPrice": "250000",
+  "maxPrice": "400000",
+  "advertType": "Rent",
+  "category": "Office",
+  "country": "Türkiye",
+  "city": "Bursa",
+  "district": "Nilüfer",
+  "searchInput": "Office"
+}

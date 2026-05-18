@@ -29,9 +29,10 @@ export const PROPERTIES_DATA: FilterOptions = {
   advertType: "Sale",
   category: "Villa",
   country: "Türkiye",
+  locationField:"Gölbaşı, Ankara, Türkiye",
   city: "Ankara",
   district: "Gölbaşı",
-  searchText: "villa",
+  searchInput: "villa",
   advertTypeField:"SALE",
   description: "A luxurious villa with a pool, nestled in nature in Gölbaşı.",
 };
@@ -39,7 +40,14 @@ export const PROPERTIES_DATA: FilterOptions = {
 export const testData = {
    date: "2026-05-20",
    time: "14:00",
- };
+};
+ 
+export const tourRequestData = {
+  propertyName: "Luxury Villa With Pool",
+  updatedDate: "2025-05-20",
+  updatedTime: "10:00",
+};
+
 
 
 /**

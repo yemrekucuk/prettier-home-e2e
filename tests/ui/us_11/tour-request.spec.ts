@@ -3,6 +3,7 @@ import { NavbarPage } from "../../../pages/main/NavbarPage";
 import {
   PROPERTIES_DATA,
   testData,
+  tourRequestData,
 } from "../../../test-data/TestDataProperties";
 import { DateUtils } from "../../../utils/DateUtils";
 import { WaitUtils } from "../../../utils/WaitUtils";
@@ -45,7 +46,7 @@ test.describe("Tour Request Flow", () => {
     listingDetailsPage,
   }) => {
     //1)Olusturdugumuz schedule methodla hem input iclerini doluysa temizleyip+date utils method kullanarak tarih ve saat seciyoruz
-    await listingDetailsPage.scheduleATour(DateUtils.future(3), "14:00");
+    await listingDetailsPage.scheduleATour(DateUtils.future(4), "14:00");
     //2)Randevuyu olusturmak icin submit
     await listingDetailsPage.submitTourButton.click();
     //3)Olusturdugumuz randevuyu wateutils method ile kontrol edip dogruluyoruz
@@ -68,7 +69,7 @@ test.describe("My Tour Requests Flow", () => {
     //2)Acilan menuden my tour request linki tikliyoruz
     await propertiesPage.myTourRequestsLink.click();
     //3)Olusturdugumuz delete methodu ile hem delete butona tiklayip+hem yes click yapip hem gelen basari mesaji dogruluyoruz
-    await myTourRequestsPage.deleteRequest();
+    await myTourRequestsPage.deleteRequest(tourRequestData.propertyName);
   });
 
   test("TC_14 Customer Tour Request kaydini güncelleyebilmeli", async ({
@@ -81,7 +82,7 @@ test.describe("My Tour Requests Flow", () => {
     //2)Acilan menuden my Tour Request i tikliyoruz
     await propertiesPage.myTourRequestsLink.click();
     //3)MYTR Page de olusturdugumuz edit methoduyla properties edit icine giriryoruz
-    await myTourRequestsPage.clickEditRequest("Luxury Villa With Pool");
+    await myTourRequestsPage.clickEditRequest(tourRequestData.propertyName);
     //4)Acilan edit formunda olusturdugumuz update methodunu + test datadaki verileri kullanarak formu doldurp update e tikliyoruz
     await myTourRequestsPage.updateTourRequest(testData.date, testData.time);
     //5)Utils dosyamizdaki waitutils methodunu kullanarak update in basarili oldugu mesajini dogruluyoruz

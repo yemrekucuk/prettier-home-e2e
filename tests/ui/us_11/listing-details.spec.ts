@@ -16,7 +16,9 @@ test.describe("Listing Details Tests", () => {
       await propertiesPage.clickSearch();
 
       // İlk ilana gir
+      await propertiesPage.listingCards.first().waitFor({ state: "visible" });
       await propertiesPage.listingCards.first().click();
+
     });
 
     test("TC_08 → Listing Details sayfasında tüm alanlar doğru görüntülenmeli", async ({  listingDetailsPage }) => {

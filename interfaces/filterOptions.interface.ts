@@ -12,5 +12,7 @@ export interface FilterOptions {
   city?: string;
   district?: string;
   advertTypeField?: string;
+  locationField?: string;
+  searchInput?: string;
   description?: string;
 }

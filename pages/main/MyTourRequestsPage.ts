@@ -15,13 +15,21 @@ export class MyTourRequestsPage extends NavbarPage {
   readonly previousPageButton: Locator;
   readonly confirmPopup: Locator;
   readonly emptyStateText = "No results found";
+  readonly myRequestTableFirstRow: Locator;
+  readonly myRequestTableFirstRowAdvertName: Locator;
+  readonly lastCreatedTourRequestDeleteButton: Locator;
+  readonly deletePopupYesButton: Locator;
+  readonly deletePopupNoButton: Locator;
+  readonly deleteSuccessMessage: Locator;
 
   constructor(page: Page) {
     super(page);
 
-    this.requestRows = page.locator("table tbody tr");
+    // Kart yapısı
+    this.requestRows = page.locator(".getproperty");
     this.toastMessage = page.locator(".p-toast-detail");
-    //Ilanin Edit sayfasindaki locatorlar
+
+    // Edit sayfası locatorları
     this.dateInput = page.locator('input[name="tourDate"]');
     this.timeSelect = page.locator('select[name="tourTime"]');
     this.updateButton = page.getByRole("button", { name: "UPDATE" });
@@ -41,7 +49,27 @@ export class MyTourRequestsPage extends NavbarPage {
       ".tab-pane.active .p-paginator-bottom button[data-pc-section='prevpagebutton']",
     );
     this.confirmPopup = page.locator(".p-confirm-popup");
+    this.myRequestTableFirstRow = page.locator("(//tbody)[1]/tr[1]");
+    this.myRequestTableFirstRowAdvertName = page.locator(
+      "(//div[@class='text']/p)[1]",
+    );
+    this.lastCreatedTourRequestDeleteButton = page.locator(
+      "(//button[@class='btn-link btn btn-primary'])[1]",
+    );
+    this.deletePopupYesButton = page.locator(
+      "(//span[@class='p-button-label p-c'])[2]",
+    );
+    this.deletePopupNoButton = page.locator(
+      "(//span[@class='p-button-label p-c'])[1]",
+    );
+    this.deleteSuccessMessage = page.locator(
+      "//div[@class='p-toast-message-text']",
+    );
   }
+
+  // --------------------------
+  // PRIVATE HELPERS
+  // --------------------------
 
   private getRowByPropertyName(propertyName: string) {
     return this.requestRows.filter({ hasText: propertyName });
@@ -49,73 +77,75 @@ export class MyTourRequestsPage extends NavbarPage {
 
   private getEditButton(row: Locator) {
     return row.getByRole("button").filter({
-      has: this.page.locator('svg path[d^="M17 3a2.85"]'),
+      has: row.locator('svg path[d^="M17 3a2.85"]'),
     });
   }
 
   private getDeleteButton(row: Locator) {
     return row.getByRole("button").filter({
-      has: this.page.locator('svg path[d^="M19 6v14"]'),
+      has: row.locator('svg path[d^="M19 6v14"]'),
     });
   }
 
-  async deleteRequest() {
-    // 1) İlk satırı bul ve görünmesini bekle
-    const firstRow = this.page.locator("tbody tr").first();
-    await firstRow.waitFor({ state: "visible" });
+  // --------------------------
+  // ACTIONS
+  // --------------------------
 
-    // 2) İlk satırdaki delete butonuna tıkla (genelde ilk button)
-    const deleteButton = firstRow.locator("button").first();
+  async deleteRequest(propertyName: string) {
+    const row = this.getRowByPropertyName(propertyName).first();
+    
+    await WaitUtils.waitForVisible(row);
+
+    const deleteButton = this.getDeleteButton(row);
+    await WaitUtils.waitForVisible(deleteButton);
+
     await deleteButton.click();
 
-    // 3) Popup görünene kadar bekle (KRİTİK)
     await this.page.locator(".p-confirm-popup").waitFor({ state: "visible" });
-
-    // 4) Yes butonuna tıkla
     await this.page.getByRole("button", { name: "Yes" }).click();
 
-    // 5) Toast mesajını bekle
     await WaitUtils.waitForToast(this.page, "Tour request deleted");
   }
 
   async clickEditRequest(propertyName: string) {
-    const row = this.getRowByPropertyName(propertyName);
+    const row = this.getRowByPropertyName(propertyName).first();
+    
     await WaitUtils.waitForVisible(row);
 
     const editButton = this.getEditButton(row);
-
-    if ((await editButton.count()) === 0) {
-      throw new Error(`Edit button not found for property: ${propertyName}`);
-    }
+    await WaitUtils.waitForVisible(editButton);
 
     await editButton.click();
   }
+
   async clickUpdateButton() {
-    await this.page.getByRole("button", { name: "UPDATE" }).click();
+    await this.updateButton.click();
   }
+
   async updateTourRequest(date: string, time: string) {
-    const dateInput = this.page.locator('input[name="tourDate"]');
-    const timeSelect = this.page.locator('select[name="tourTime"]');
-
-    await dateInput.fill(date);
-    await timeSelect.selectOption(time);
-
-    await this.page.getByRole("button", { name: "UPDATE" }).click();
+    await this.dateInput.fill(date);
+    await this.timeSelect.selectOption(time);
+    await this.updateButton.click();
   }
+
+  // --------------------------
+  // GETTERS 
+  // --------------------------
 
   async getStatusText(propertyName: string) {
-    const row = this.getRowByPropertyName(propertyName);
+    const row = this.getRowByPropertyName(propertyName).first();
     await WaitUtils.waitForVisible(row);
 
-    return row.locator("td").nth(2).innerText();
+    
+    return row.locator(".text p").nth(2).innerText();
   }
 
   async getTourDateTime(propertyName: string) {
-    const row = this.getRowByPropertyName(propertyName);
+    const row = this.getRowByPropertyName(propertyName).first();
     await WaitUtils.waitForVisible(row);
 
-    const date = await row.locator("td").nth(3).innerText();
-    const time = await row.locator("td").nth(4).innerText();
+    const date = await row.locator(".tour-date").innerText();
+    const time = await row.locator(".tour-time").innerText();
 
     return { date, time };
   }
@@ -161,5 +191,18 @@ export class MyTourRequestsPage extends NavbarPage {
   }
   async clickPreviousPageButton() {
     await this.previousPageButton.click();
+  async lastCreatedTourRequestVisibleTest() {
+    await WaitUtils.waitForVisible(this.myRequestTableFirstRow);
+    expect(this.myRequestTableFirstRow).toBeVisible();
+  }
+
+  async deleteLastCreatedTourRequest() {
+    await this.lastCreatedTourRequestDeleteButton.click();
+    await this.page.waitForTimeout(2000);
+    await this.deletePopupYesButton.click();
+  }
+  async deleteMessageVisibleTest() {
+    await WaitUtils.waitForVisible(this.deleteSuccessMessage);
+    expect(this.deleteSuccessMessage).toBeVisible();
   }
 }

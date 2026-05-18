@@ -93,7 +93,7 @@ export class MyTourRequestsPage extends NavbarPage {
 
   async deleteRequest(propertyName: string) {
     const row = this.getRowByPropertyName(propertyName).first();
-    
+
     await WaitUtils.waitForVisible(row);
 
     const deleteButton = this.getDeleteButton(row);
@@ -109,7 +109,7 @@ export class MyTourRequestsPage extends NavbarPage {
 
   async clickEditRequest(propertyName: string) {
     const row = this.getRowByPropertyName(propertyName).first();
-    
+
     await WaitUtils.waitForVisible(row);
 
     const editButton = this.getEditButton(row);
@@ -129,14 +129,13 @@ export class MyTourRequestsPage extends NavbarPage {
   }
 
   // --------------------------
-  // GETTERS 
+  // GETTERS
   // --------------------------
 
   async getStatusText(propertyName: string) {
     const row = this.getRowByPropertyName(propertyName).first();
     await WaitUtils.waitForVisible(row);
 
-    
     return row.locator(".text p").nth(2).innerText();
   }
 
@@ -191,6 +190,7 @@ export class MyTourRequestsPage extends NavbarPage {
   }
   async clickPreviousPageButton() {
     await this.previousPageButton.click();
+  }
   async lastCreatedTourRequestVisibleTest() {
     await WaitUtils.waitForVisible(this.myRequestTableFirstRow);
     expect(this.myRequestTableFirstRow).toBeVisible();

@@ -1,5 +1,5 @@
-import { Page, Locator,expect } from "@playwright/test";
-import { NavbarPage } from "../NavbarPage";
+import { Page, Locator, expect } from "@playwright/test";
+import { NavbarPage } from "./NavbarPage";
 import { WaitUtils } from "../../utils/WaitUtils";
 
 export class MyTourRequestsPage extends NavbarPage {
@@ -8,6 +8,12 @@ export class MyTourRequestsPage extends NavbarPage {
   readonly dateInput: Locator;
   readonly timeSelect: Locator;
   readonly updateButton: Locator;
+  readonly myRequestTableFirstRow: Locator;
+  readonly myRequestTableFirstRowAdvertName: Locator;
+  readonly lastCreatedTourRequestDeleteButton: Locator;
+  readonly deletePopupYesButton: Locator;
+  readonly deletePopupNoButton: Locator;
+  readonly deleteSuccessMessage: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -20,6 +26,22 @@ export class MyTourRequestsPage extends NavbarPage {
     this.dateInput = page.locator('input[name="tourDate"]');
     this.timeSelect = page.locator('select[name="tourTime"]');
     this.updateButton = page.getByRole("button", { name: "UPDATE" });
+    this.myRequestTableFirstRow = page.locator("(//tbody)[1]/tr[1]");
+    this.myRequestTableFirstRowAdvertName = page.locator(
+      "(//div[@class='text']/p)[1]",
+    );
+    this.lastCreatedTourRequestDeleteButton = page.locator(
+      "(//button[@class='btn-link btn btn-primary'])[1]",
+    );
+    this.deletePopupYesButton = page.locator(
+      "(//span[@class='p-button-label p-c'])[2]",
+    );
+    this.deletePopupNoButton = page.locator(
+      "(//span[@class='p-button-label p-c'])[1]",
+    );
+    this.deleteSuccessMessage = page.locator(
+      "//div[@class='p-toast-message-text']",
+    );
   }
 
   // --------------------------
@@ -103,5 +125,20 @@ export class MyTourRequestsPage extends NavbarPage {
     const time = await row.locator(".tour-time").innerText();
 
     return { date, time };
+  }
+
+  async lastCreatedTourRequestVisibleTest() {
+    await WaitUtils.waitForVisible(this.myRequestTableFirstRow);
+    expect(this.myRequestTableFirstRow).toBeVisible();
+  }
+
+  async deleteLastCreatedTourRequest() {
+    await this.lastCreatedTourRequestDeleteButton.click();
+    await this.page.waitForTimeout(2000);
+    await this.deletePopupYesButton.click();
+  }
+  async deleteMessageVisibleTest() {
+    await WaitUtils.waitForVisible(this.deleteSuccessMessage);
+    expect(this.deleteSuccessMessage).toBeVisible();
   }
 }

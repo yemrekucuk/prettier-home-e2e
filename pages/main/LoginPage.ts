@@ -9,10 +9,16 @@ export class LoginPage extends NavbarPage {
 
   constructor(page: Page) {
     super(page);
-    this.loginHeaderLink = page.getByRole("link", { name: "Login" });
+    this.loginHeaderLink = page
+      .locator("a.nav-link")
+      .filter({ hasText: "Login" });
     this.emailInput = page.locator('input[name="email"]');
     this.passwordInput = page.locator('input[name="password"]');
     this.loginButton = page.locator('button[type="submit"]');
+  }
+
+  async navigate() {
+    await this.page.goto("/login");
   }
 
   async login(email: string, password: string) {
@@ -39,6 +45,13 @@ export class LoginPage extends NavbarPage {
     await this.login(
       process.env.CUSTOMER_EMAIL as string,
       process.env.CUSTOMER_PASSWORD as string,
+    );
+  }
+
+  async loginAsEmptyManager() {
+    await this.login(
+      process.env.EMPTY_MANAGER_EMAIL as string,
+      process.env.EMPTY_MANAGER_PASSWORD as string,
     );
   }
 }

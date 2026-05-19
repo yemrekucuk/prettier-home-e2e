@@ -1,7 +1,7 @@
 import { Page, Locator } from "@playwright/test";
-import { Navbar } from "../Navbar";
+import { NavbarPage } from "./NavbarPage";
 
-export class RegisterPage extends Navbar {
+export class RegisterPage extends NavbarPage {
 
     readonly firstNameInput: Locator;
     readonly lastNameInput: Locator;

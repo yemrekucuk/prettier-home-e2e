@@ -64,6 +64,56 @@ export class PropertiesPage extends NavbarPage {
   get myTourRequestsPropertiesLink() {
     return this.page.getByRole("link", { name: "My Tour Requests" });
   }
+    get filterSearchButton() {
+    return this.page.getByRole('button', { name: 'Search' });
+  }
+  get advertImage() {
+  return this.page.locator('span').nth(1);
+}
+
+get detailsHeading() {
+  return this.page.getByRole('heading', { name: 'DETAILS' });
+}
+
+get locationHeading() {
+  return this.page.getByRole('heading', { name: 'LOCATION' });
+}
+
+get descriptionHeading() {
+  return this.page.getByRole('heading', { name: 'Description' });
+}
+get saleButton() {
+  return this.page.getByRole('button', { name: 'SALE' });
+}
+
+get tourDateInput() {
+  return this.page.getByRole('textbox', { name: 'Tour Date' });
+}
+
+get tourTimeSelect() {
+  return this.page.getByLabel('Tour Time');
+}
+
+get submitTourButton() {
+  return this.page.getByRole('button', { name: 'Submit a tour request' });
+}
+
+get loginForTourText() {
+  return this.page.getByText('Log in for tour requestFound');
+}
+
+get createOneNowText() {
+  return this.page.getByText("Don't have an account? Create");
+}
+get searchBoxInput() {
+  return this.page.getByRole('searchbox', { name: 'Search' });
+}
+get searchButtonInput() {
+  return this.page.locator('div.search-input-wrapper button');
+}
+get createOneNowLink() {
+  return this.page.getByText('Create one now!');
+}
 
   // ---------------------------
   // FILTER LOGIC

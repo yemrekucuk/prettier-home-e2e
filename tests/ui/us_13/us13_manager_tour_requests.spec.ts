@@ -3,7 +3,7 @@ import { LoginPage } from "../../../pages/main/LoginPage";
 import { ControlPanelPage } from "../../../pages/dashboard/ControlPanelPage";
 import { MyTourRequestsPage } from "../../../pages/main/MyTourRequestsPage";
 
-test.describe("US_13 - Manager Tour Requests Validation", () => {
+test.describe.serial("US_13 - Manager Tour Requests Validation", () => {
   let loginPage: LoginPage;
   let controlPanelPage: ControlPanelPage;
   let myTourRequestsPage: MyTourRequestsPage;
@@ -68,7 +68,7 @@ test.describe("US_13 - Manager Tour Requests Validation", () => {
   });
 });
 
-test.describe("US_13 - Manager Tour Requests Validation (Empty State)", () => {
+test.describe.serial("US_13 - Manager Tour Requests Validation (Empty State)", () => {
   let loginPage: LoginPage;
   let controlPanelPage: ControlPanelPage;
   let myTourRequestsPage: MyTourRequestsPage;

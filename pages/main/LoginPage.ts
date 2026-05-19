@@ -6,6 +6,7 @@ export class LoginPage extends NavbarPage {
   readonly emailInput: Locator;
   readonly passwordInput: Locator;
   readonly loginButton: Locator;
+  readonly userPic: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -15,6 +16,7 @@ export class LoginPage extends NavbarPage {
     this.emailInput = page.locator('input[name="email"]');
     this.passwordInput = page.locator('input[name="password"]');
     this.loginButton = page.locator('button[type="submit"]');
+    this.userPic = page.locator('.user-pic').first();
   }
 
   async navigate() {
@@ -25,6 +27,20 @@ export class LoginPage extends NavbarPage {
     await this.loginHeaderLink.click();
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
+    await this.loginButton.click();
+  }
+
+  async navigateToLoginPage() {
+    await this.page.goto(process.env.BASE_URL as string);
+    await this.clickLoginLink();
+  }
+
+  async fillLoginForm(email: string, password: string) {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+  }
+
+  async clickLoginButton() {
     await this.loginButton.click();
   }
 
@@ -41,6 +57,7 @@ export class LoginPage extends NavbarPage {
       process.env.MANAGER_PASSWORD as string,
     );
   }
+
   async loginAsCustomer() {
     await this.login(
       process.env.CUSTOMER_EMAIL as string,

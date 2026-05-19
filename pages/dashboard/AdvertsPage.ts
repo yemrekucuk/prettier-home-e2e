@@ -1,8 +1,9 @@
 import { Page } from "@playwright/test";
-import { ControlPanelPage } from "./ControlPanelPage"; 
+import { ControlPanelPage } from "../dashboard/ControlPanelPage";
+
 
 export class AdvertsPage extends ControlPanelPage {
   constructor(page: Page) {
-    super(page); 
+    super(page);
   }
 }

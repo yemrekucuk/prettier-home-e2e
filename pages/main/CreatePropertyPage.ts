@@ -1,5 +1,5 @@
 import { Page, Locator } from "@playwright/test";
-import { Navbar } from "../Navbar";
+import { NavbarPage } from "./NavbarPage";
 
 export const defaultValidFormData = {
   title: "Merkezi Konumda 3+1 Kiralık Daire",
@@ -21,7 +21,7 @@ export const defaultValidFormData = {
   terrace: "No",
 };
 
-export class CreatePropertyPage extends Navbar {
+export class CreatePropertyPage extends NavbarPage {
   readonly titleInput: Locator;
   readonly descriptionInput: Locator;
   readonly priceInput: Locator;

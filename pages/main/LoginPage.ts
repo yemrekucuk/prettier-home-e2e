@@ -1,31 +1,57 @@
 import { Page, Locator } from "@playwright/test";
-import { Navbar } from "../Navbar";
+import { NavbarPage } from "./NavbarPage";
 
-export class LoginPage extends Navbar{
-    
-    readonly emailInput: Locator;
-    readonly passwordInput: Locator;
-    readonly loginButton: Locator;
+export class LoginPage extends NavbarPage {
+  readonly loginHeaderLink: Locator; // Formu açan link
+  readonly emailInput: Locator;
+  readonly passwordInput: Locator;
+  readonly loginButton: Locator;
 
-    constructor(page: Page) {
-        super(page)
-        
-        this.emailInput = page.locator('input[name="email"]');
-        this.passwordInput = page.locator('input[name="password"]');
-        this.loginButton = page.locator('button[type="submit"]');
-    }
+  constructor(page: Page) {
+    super(page);
+    this.loginHeaderLink = page
+      .locator("a.nav-link")
+      .filter({ hasText: "Login" });
+    this.emailInput = page.locator('input[name="email"]');
+    this.passwordInput = page.locator('input[name="password"]');
+    this.loginButton = page.locator('button[type="submit"]');
+  }
 
-    async login(email: string, password: string) {
-        await this.emailInput.fill(email);
-        await this.passwordInput.fill(password);
-        await this.loginButton.click();
-    }
+  async navigate() {
+    await this.page.goto("/login");
+  }
 
-    async loginAsAdmin() {
-        await this.login(process.env.ADMIN_EMAIL as string, process.env.ADMIN_PASSWORD as string);
-    }
+  async login(email: string, password: string) {
+    await this.loginHeaderLink.click();
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.loginButton.click();
+  }
 
-    async loginAsManager() {
-        await this.login(process.env.MANAGER_EMAIL as string, process.env.MANAGER_PASSWORD as string);
-    }
+  async loginAsAdmin() {
+    await this.login(
+      process.env.ADMIN_EMAIL as string,
+      process.env.ADMIN_PASSWORD as string,
+    );
+  }
+
+  async loginAsManager() {
+    await this.login(
+      process.env.MANAGER_EMAIL as string,
+      process.env.MANAGER_PASSWORD as string,
+    );
+  }
+  async loginAsCustomer() {
+    await this.login(
+      process.env.CUSTOMER_EMAIL as string,
+      process.env.CUSTOMER_PASSWORD as string,
+    );
+  }
+
+  async loginAsEmptyManager() {
+    await this.login(
+      process.env.EMPTY_MANAGER_EMAIL as string,
+      process.env.EMPTY_MANAGER_PASSWORD as string,
+    );
+  }
 }

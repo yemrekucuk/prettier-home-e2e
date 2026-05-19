@@ -23,7 +23,7 @@ test.describe("US_07 Create Property (Manager) Tests", () => {
     const propertyPage = new CreatePropertyPage(page);
 
     await propertyPage.clickPropertyButton();
-    await propertyPage.fillAdvertForm({
+    await propertyPage.fillAdvertFormm({
       title: "2+1 satılık ev",
       description: "Sahibinden satılık ev",
       price: "8000000",
@@ -53,7 +53,7 @@ test.describe("US_07 Create Property (Manager) Tests", () => {
     const propertyPage = new CreatePropertyPage(page);
 
     await propertyPage.clickPropertyButton();
-    await propertyPage.fillAdvertForm({
+    await propertyPage.fillAdvertFormm({
       title: "5+1 Daire",
       description: "Villa",
       price: "20000000",
@@ -84,7 +84,7 @@ test.describe("US_07 Create Property (Manager) Tests", () => {
     const propertyPage = new CreatePropertyPage(page);
 
     await propertyPage.clickPropertyButton();
-    await propertyPage.fillAdvertForm({
+    await propertyPage.fillAdvertFormm({
       title: "1+1 ofis",
       description: "ofis",
       price: "50000",
@@ -112,7 +112,7 @@ test.describe("US_07 Create Property (Manager) Tests", () => {
     const propertyPage = new CreatePropertyPage(page);
 
     await propertyPage.clickPropertyButton();
-    await propertyPage.fillAdvertForm({
+    await propertyPage.fillAdvertFormm({
       title: "8 + 1",
       description: "VİLLA",
       price: "500000",
@@ -141,7 +141,7 @@ test.describe("US_07 Create Property (Manager) Tests", () => {
     const propertyPage = new CreatePropertyPage(page);
 
     await propertyPage.clickPropertyButton();
-    await propertyPage.fillAdvertForm({
+    await propertyPage.fillAdvertFormm({
       title: "2000 m2",
       description: "2000 m2 arsa",
       price: "8000000",
@@ -168,7 +168,7 @@ test.describe("US_07 Create Property (Manager) Tests", () => {
     const propertyPage = new CreatePropertyPage(page);
 
     await propertyPage.clickPropertyButton();
-    await propertyPage.fillAdvertForm({
+    await propertyPage.fillAdvertFormm({
       title: "250 m2",
       description: "250 m2 mağaza",
       price: "75000",
@@ -196,7 +196,7 @@ test.describe("US_07 Create Property (Manager) Tests", () => {
     const propertyPage = new CreatePropertyPage(page);
 
     await propertyPage.clickPropertyButton();
-    await propertyPage.fillAdvertForm({
+    await propertyPage.fillAdvertFormm({
       title: "abc",
       description: "Sahibinden satılık ev",
       price: "500"
@@ -214,7 +214,7 @@ test.describe("US_07 Create Property (Manager) Tests", () => {
     const propertyPage = new CreatePropertyPage(page);
 
     await propertyPage.clickPropertyButton();
-    await propertyPage.fillAdvertForm({
+    await propertyPage.fillAdvertFormm({
       title: "Geniş Bahçeli Ev",
       description: "Sahibinden satılık ev",
       price: "500",
@@ -232,7 +232,7 @@ test.describe("US_07 Create Property (Manager) Tests", () => {
     const propertyPage = new CreatePropertyPage(page);
 
     await propertyPage.clickPropertyButton();
-    await propertyPage.fillAdvertForm({
+    await propertyPage.fillAdvertFormm({
       title: "Geniş Bahçeli Ev",
       description: "Sahibinden satılık ev",
       price: "-6000"
@@ -249,7 +249,7 @@ test.describe("US_07 Create Property (Manager) Tests", () => {
     const propertyPage = new CreatePropertyPage(page);
 
     await propertyPage.clickPropertyButton();
-    await propertyPage.fillAdvertForm({
+    await propertyPage.fillAdvertFormm({
       title: "Geniş Bahçeli Ev",
       description: "Sahibinden satılık ev",
       price: "86000",

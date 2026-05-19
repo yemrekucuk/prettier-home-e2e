@@ -52,6 +52,7 @@ export class Navbar {
     this.myTourRequestsLink = userMenu.locator("a[href='/my-tour-requests']");
     this.dashboardLink = userMenu.locator("a[href='/dashboard']");
     this.logoutButton = userMenu.locator('a[href="/"]');
+
   }
 
   async clickHomeLink() {

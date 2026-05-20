@@ -6,7 +6,8 @@ import path from "path";
  * .env dosyasını okumak için yapılandırma.
  * Bu sayede process.env.BASE_URL gibi değişkenlere erişebilirsin.
  */
-dotenv.config({ path: path.resolve(__dirname, ".env") });
+dotenv.config();
+
 
 /**
  * Read environment variables from file.

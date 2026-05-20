@@ -51,6 +51,14 @@ export class CreatePropertyPage extends NavbarPage {
   readonly imageUploadInput: Locator;
   readonly createButton: Locator;
 
+  readonly parkingSpaceDropdown: Locator;
+  readonly balconyDropdown: Locator;
+  readonly elevatorDropdown: Locator;
+  readonly zoningInput: Locator;
+  readonly accessRoadInput: Locator;
+  readonly legalStatusInput: Locator;
+  readonly landAreaInput: Locator;
+
   constructor(page: Page) {
     super(page);
 
@@ -82,6 +90,13 @@ export class CreatePropertyPage extends NavbarPage {
     this.furnitureDropdown = page.getByLabel("Furniture");
     this.maintenanceFeeInput = page.getByLabel("Maintenance Fee");
     this.terraceDropdown = page.getByLabel("Terrace");
+    this.parkingSpaceDropdown = page.getByLabel("Parking Space");
+    this.balconyDropdown = page.getByLabel("Balcony");
+    this.elevatorDropdown = page.getByLabel("Elevator");
+    this.zoningInput = page.getByLabel("Zoning");
+    this.accessRoadInput = page.getByLabel("Access Road");
+    this.legalStatusInput = page.getByLabel("Legal Status");
+    this.landAreaInput = page.getByLabel("Land Area");
 
     // --- Image Upload ---
     this.imageUploadInput = page.locator('input[type="file"]');
@@ -90,6 +105,12 @@ export class CreatePropertyPage extends NavbarPage {
     this.createButton = page.locator('button[type="submit"]', {
       hasText: "Create",
     });
+  }
+  async clickPropertyButton() {
+    await this.page
+      .locator("text=İlan Ekle")
+      .or(this.page.locator("text=Create Property"))
+      .click();
   }
 
   async fillAdvertForm(formData: any = {}) {
@@ -129,6 +150,84 @@ export class CreatePropertyPage extends NavbarPage {
       await this.maintenanceFeeInput.fill(data.maintenanceFee);
     if (data.terrace !== undefined)
       await this.terraceDropdown.selectOption(data.terrace);
+  }
+
+
+  async fillAdvertFormm(formData: any = {}) {
+    let data = { ...formData };
+    const isDefaultCategory =
+      !formData.category ||
+      formData.category === "Ev" ||
+      formData.category === "House";
+    if (isDefaultCategory) {
+      data = { ...defaultValidFormData, ...formData };
+    }
+    if (data.title !== undefined) await this.titleInput.fill(data.title);
+    if (data.description !== undefined)
+      await this.descriptionInput.fill(data.description);
+    if (data.price !== undefined) await this.priceInput.fill(data.price);
+
+    if (data.advertType !== undefined)
+      await this.advertTypeDropdown.selectOption(
+        data.advertType === "Satılık"
+          ? { label: "Sale" }
+          : { label: data.advertType },
+      );
+    const categoryMap: Record<string, string> = {
+      Ev: "House",
+      Apartman: "Apartment",
+      Ofis: "Office",
+      Villa: "Villa",
+      Arsa: "Land",
+      Mağaza: "Shop",
+    };
+    if (data.category !== undefined) {
+      const translatedCategory = categoryMap[data.category] || data.category;
+      await this.categoryDropdown.selectOption({ label: translatedCategory });
+    }
+    if (data.country !== undefined)
+      await this.countryDropdown.selectOption({ label: data.country });
+    if (data.city !== undefined)
+      await this.cityDropdown.selectOption({ label: data.city });
+    if (data.district !== undefined)
+      await this.districtDropdown.selectOption({ label: data.district });
+
+    const fillOpt = async (loc: Locator, val: string | undefined) => {
+      if (val !== undefined) {
+        try {
+          await loc.fill(val, { timeout: 1000 });
+        } catch (e) {}
+      }
+    };
+    const selOpt = async (loc: Locator, val: string | undefined) => {
+      if (val !== undefined) {
+        try {
+          await loc.selectOption({ label: val }, { timeout: 1000 });
+        } catch (e) {}
+      }
+    };
+
+    await fillOpt(this.addressInput, data.address);
+    await fillOpt(this.sizeInput, data.size);
+    await fillOpt(this.bedroomsInput, data.bedrooms);
+    await fillOpt(this.bathroomsInput, data.bathrooms);
+
+    await selOpt(this.garageDropdown, data.garage);
+
+    const yearValue =
+      data.buildYear !== undefined ? data.buildYear : data.yearOfBuild;
+    await fillOpt(this.buildYearInput, yearValue);
+
+    await selOpt(this.furnitureDropdown, data.furniture);
+    await fillOpt(this.maintenanceFeeInput, data.maintenanceFee);
+    await selOpt(this.terraceDropdown, data.terrace);
+    await selOpt(this.parkingSpaceDropdown, data.parkingSpace);
+    await selOpt(this.balconyDropdown, data.balcony);
+    await selOpt(this.elevatorDropdown, data.elevator);
+    await fillOpt(this.zoningInput, data.zoning);
+    await fillOpt(this.accessRoadInput, data.accessRoad);
+    await fillOpt(this.legalStatusInput, data.legalStatus);
+    await fillOpt(this.landAreaInput, data.landArea);
   }
 
   async uploadImage(filePath: string) {

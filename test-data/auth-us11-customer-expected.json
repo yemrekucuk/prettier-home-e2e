@@ -1,0 +1,12 @@
+{
+  "requiredFields": [
+    "id",
+    "firstName",
+    "lastName",
+    "email",
+    "phone",
+    "role",
+    "profilePhoto"
+  ],
+  "role": "CUSTOMER"
+}

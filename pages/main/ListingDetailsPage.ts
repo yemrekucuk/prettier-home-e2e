@@ -1,5 +1,5 @@
-import { Page, Locator } from "@playwright/test";
-import { NavbarPage } from "../NavbarPage";
+import { Page, Locator,expect } from "@playwright/test";
+import { NavbarPage } from "./NavbarPage";
 import { InputUtils } from "../../utils/InputUtils";
 
 export class ListingDetailsPage extends NavbarPage {
@@ -13,15 +13,17 @@ export class ListingDetailsPage extends NavbarPage {
   readonly submitTourButton: Locator;
   readonly successMessage: Locator;
   readonly categoryField: Locator;
-
   readonly ownerContactSection: Locator;
   readonly ownerName: Locator;
-
   readonly contactNumberButton: Locator;
   readonly contactNumberToggle: Locator;
-
   readonly sendMailButton: Locator;
   readonly sendMailToggle: Locator;
+  readonly phoneNumberHiddenButton: Locator;
+  readonly phoneNumberHiddenText: Locator;
+  readonly emailHiddenButton: Locator;
+  readonly emailHiddenText: Locator;
+  readonly detailsField: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -66,6 +68,21 @@ export class ListingDetailsPage extends NavbarPage {
     this.sendMailToggle = page.locator(
       ".advert-details-owner-mail button.show-toggle",
     );
+    this.detailsField = page.locator(
+      "//div[@class='advert-details-properties-container container']",
+    );
+    this.phoneNumberHiddenButton = page.locator(
+      "(//button[@class='show-toggle btn btn-danger'])[1]",
+    );
+    this.emailHiddenButton = page.locator(
+      "(//button[@class='show-toggle btn btn-danger'])[2]",
+    );
+    this.phoneNumberHiddenText = page.locator(
+      "//a[@class='advert-detail-phone-link']",
+    );
+    this.emailHiddenText = page.locator(
+      "//a[@class='advert-detail-mail-link']",
+    );
   }
 
   /**
@@ -77,5 +94,19 @@ export class ListingDetailsPage extends NavbarPage {
     await this.submitTourButton.click();
 
     await this.successMessage.waitFor({ state: "visible" });
+  }
+
+  async listingDetailsVisibleTests() {
+    await this.phoneNumberHiddenButton.click();
+    await this.emailHiddenButton.click();
+    await expect(this.emailHiddenText).toBeVisible();
+    await expect(this.phoneNumberHiddenText).toBeVisible();
+    await expect(this.descriptionField).toBeVisible();
+    await expect(this.detailsField).toBeVisible();
+    await expect(this.locationField).toBeVisible();
+  }
+
+  async successMessageVisibleTest() {
+    expect(this.successMessage).toBeVisible();
   }
 }

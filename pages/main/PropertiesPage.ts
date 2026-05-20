@@ -1,11 +1,17 @@
-import { Page, expect } from "@playwright/test";
-import { NavbarPage } from "../NavbarPage";
+import { Locator, Page, expect } from "@playwright/test";
+import { NavbarPage } from "./NavbarPage";
 import { FilterOptions } from "../../interfaces/filterOptions.interface";
 import { WaitUtils } from "../../utils/WaitUtils";
+import searchData from "../../test-data/SearchData.json"
 
 export class PropertiesPage extends NavbarPage {
+  readonly firstSearcedPropertie: Locator;
+
   constructor(page: Page) {
     super(page);
+    this.firstSearcedPropertie = page.locator(
+      "(//div/a/img[@class='card-img-top property-card-img'])[1]",
+    );
   }
 
   // ---------------------------
@@ -135,5 +141,38 @@ export class PropertiesPage extends NavbarPage {
   async goToFirstPropertyDetails() {
     await this.listingCards.first().waitFor({ state: "visible" });
     await this.listingCards.first().click();
+  }
+
+  async clickFirstSearchedPropertie() {
+    await this.firstSearcedPropertie.waitFor({ state: "visible" });
+    await this.firstSearcedPropertie.click();
+  }
+
+  async isVisibleFirstSearchedPropertie() {
+    await this.firstSearcedPropertie.waitFor({ state: "visible" });
+    await expect(this.firstSearcedPropertie).toBeVisible();
+  }
+
+  async searchRentPropertiesWithSpesificDatas() {
+    await this.searchInput.fill(searchData.searchInput);
+
+    await this.minPriceInput.fill(searchData.minPrice);
+
+    await this.maxPriceInput.fill(searchData.maxPrice);
+
+    await this.advertTypeSelect.selectOption({ label: searchData.advertType });
+
+    await this.categorySelect.selectOption({ label: searchData.category });
+
+    await this.countrySelect.selectOption({ label: searchData.country });
+
+    await this.citySelect.selectOption({ label: searchData.city });
+
+    await this.page.waitForSelector(
+      'select[id="dist"] option:has-text("Nilüfer")',
+      { state: "attached" },
+    );
+
+    await this.districtSelect.selectOption({ label: searchData.district });
   }
 }

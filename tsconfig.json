@@ -8,9 +8,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["node"],
-    "resolveJsonModule": true,
-    "esModuleInterop": true
+    "types": ["node"]
   },
   "include": ["**/*.ts"]
 }

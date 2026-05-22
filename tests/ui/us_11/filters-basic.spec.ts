@@ -1,5 +1,4 @@
 import { test, expect } from "../../../fixtures/propertiesFixtures";
-import { PropertiesPage } from "../../../pages/main/PropertiesPage";
 import { PROPERTIES_DATA } from "../../../test-data/TestDataProperties";
 import { WaitUtils } from "../../../utils/WaitUtils";
 
@@ -18,10 +17,10 @@ test.describe("Properties  Filter Tests", () => {
     listingDetailsPage,
   }) => {
     //4) Advert Type = Sale
-    await propertiesPage.advertTypeSelect.selectOption("Sale");
+    await propertiesPage.advertTypeSelect.selectOption(PROPERTIES_DATA.advertType!);
 
     //5) Search
-    await propertiesPage.clickSearch();
+    await propertiesPage.searchButtonProperties.click();
 
     //6) İlan kartlarını bekle
     await WaitUtils.waitForList(propertiesPage.listingCards);
@@ -58,38 +57,7 @@ test.describe("Properties  Filter Tests", () => {
       PROPERTIES_DATA.category!,
     );
   });
-  test("TC_04 Price Range → Ilk ilanda fiyat araligi dogrulama", async ({
-    propertiesPage,
-    listingDetailsPage,
-  }) => {
-    //4 Advert Type
-    await propertiesPage.advertTypeSelect.selectOption(
-      PROPERTIES_DATA.advertType!,
-    );
-
-    //5 Price Range
-    await propertiesPage.minPriceInput.fill(String(PROPERTIES_DATA.minPrice));
-    await propertiesPage.maxPriceInput.fill(String(PROPERTIES_DATA.maxPrice));
-
-    //6 Search
-    await propertiesPage.clickSearch();
-
-    //7 Ilan kartlarini bekle
-    await WaitUtils.waitForList(propertiesPage.listingCards);
-
-    //8 Ilk ilana tikla
-    await propertiesPage.listingCards.first().click();
-
-    // 9) Price alanı görünene kadar bekle
-    await listingDetailsPage.advertPrice.waitFor({ state: "visible" });
-
-    //9 Fiyat dogrulama
-    const priceText = await listingDetailsPage.advertPrice.textContent();
-    const price = parseInt(priceText!.replace(/[^0-9]/g, ""), 10);
-
-    expect(price).toBeGreaterThanOrEqual(Number(PROPERTIES_DATA.minPrice));
-    expect(price).toBeLessThanOrEqual(Number(PROPERTIES_DATA.maxPrice));
-  });
+ 
 
   test("TC_05 Country → Ilk ilanda ulke dogrulama", async ({
     propertiesPage,

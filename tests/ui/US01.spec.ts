@@ -137,7 +137,7 @@ test.describe('US01 - Register', () => {
     test('US01/TC08  ==> Password minimum length validation should work correctly (Negative Scenario)', async ({ registerPage, page }) => {
 
         const data = await prepareRegisterPageWithTerms(registerPage);
-        const shortPassword = 'Pass';
+        const shortPassword = 'Ab1!';
 
         await registerPage.fillRegisterForm(
             registerData.firstName,
@@ -145,7 +145,7 @@ test.describe('US01 - Register', () => {
             data.phone,
             data.email,
             shortPassword,
-            registerData.confirmPassword
+            shortPassword
         );
 
         await expect(registerPage.registerButton).toBeDisabled();
@@ -167,7 +167,7 @@ test.describe('US01 - Register', () => {
             data.phone,
             data.email,
             passwordWithoutUppercase,
-            registerData.confirmPassword
+            passwordWithoutUppercase
         );
 
         await expect(registerPage.registerButton).toBeDisabled();
@@ -189,7 +189,7 @@ test.describe('US01 - Register', () => {
             data.phone,
             data.email,
             passwordWithoutNumber,
-            registerData.confirmPassword
+            passwordWithoutNumber
         );
 
         await expect(registerPage.registerButton).toBeDisabled();

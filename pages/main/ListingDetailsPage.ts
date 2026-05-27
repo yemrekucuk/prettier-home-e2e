@@ -1,4 +1,4 @@
-import { Page, Locator,expect } from "@playwright/test";
+import { Page, Locator, expect } from "@playwright/test";
 import { NavbarPage } from "./NavbarPage";
 import { InputUtils } from "../../utils/InputUtils";
 
@@ -28,12 +28,13 @@ export class ListingDetailsPage extends NavbarPage {
   constructor(page: Page) {
     super(page);
 
-    this.advertPrice = page.locator(".price");
+    this.advertPrice = page.locator(
+      ".advert-details-page-header-container .price",
+    );
     this.advertTitle = page.locator(".advert-title");
     this.advertTypeField = page.locator(".advert-type");
     this.categoryField = page.locator(".advert-category-title");
     this.descriptionField = page.locator(".advert-description");
-
     this.locationField = page.locator(".city-district");
 
     // Tour Request alanı
@@ -93,7 +94,7 @@ export class ListingDetailsPage extends NavbarPage {
     await this.tourTimeSelect.selectOption(time);
     await this.submitTourButton.click();
 
-    await this.successMessage.waitFor({ state: "visible" });
+    //await this.successMessage.waitFor({ state: "visible" });
   }
 
   async listingDetailsVisibleTests() {

@@ -1,0 +1,10 @@
+{
+  "q": "villa",
+  "at": 2,
+  "ps": 500000,
+  "pe": 550000,
+  "page": 0,
+  "size": 20,
+  "sort": "category.id",
+  "type": "asc"
+}

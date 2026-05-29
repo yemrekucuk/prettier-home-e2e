@@ -1,7 +1,6 @@
 import searchParams from "../../../test-data/advert-search-us11.json";
-import { test, expect } from "../../../fixtures/api-auth-fixture";
+import { test, expect } from "../../../fixtures/api-auth-customer-fixture";
 import { AdvertService } from "../../../utils/api-advert-service";
-
 
 test.describe("Advert Detail Testleri", () => {
   let advertService: AdvertService;

@@ -1,8 +1,6 @@
-import { test, expect } from "../../../fixtures/api-auth-fixture";
+import { test, expect } from "../../../fixtures/api-auth-customer-fixture";
 import { AdvertTypeService } from "../../../utils/api-advertType-service";
 import { generateRandomLetters } from "../../../utils/api-string-generator";
-
-
 
 test.describe("Advert Type CRUD Testleri", () => {
   //Testlerin birbirine bagimli calismasi icin serial mod yapiyoruz
@@ -15,7 +13,6 @@ test.describe("Advert Type CRUD Testleri", () => {
     //her testten once requestlerimizi yaptigimiz methodlarimizi utils dosyamizdan olusturuyoruz
     advertTypeService = new AdvertTypeService(authorizedRequest);
   });
-  
 
   test("Advert Type Olusturma-Create", async () => {
     /**
@@ -82,12 +79,3 @@ test.describe("Advert Type CRUD Testleri", () => {
     expect(response.status()).toBe(200);
   });
 });
-
-
-
-
-
-    
-    
-
-

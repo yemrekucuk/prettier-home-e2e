@@ -1,8 +1,6 @@
-import { test, expect } from "../../../fixtures/api-auth-fixture";
+import { test, expect } from "../../../fixtures/api-auth-customer-fixture";
 import { AdvertTypeService } from "../../../utils/api-advertType-service";
 import { IAdvertTypeResponse } from "../../../interfaces/api-advertType.interface";
-
-
 
 test.describe("Advert Type Testleri", () => {
   let advertTypeService: AdvertTypeService;
@@ -11,7 +9,6 @@ test.describe("Advert Type Testleri", () => {
     advertTypeService = new AdvertTypeService(authorizedRequest);
   });
 
-  
   test("Sale advert type dinamik ID ile doğrulama", async () => {
     // 1) Ilan tiplerinin bilgilerini aliyoruz
     const listResponse = await advertTypeService.getAllAdvertTypes();
@@ -34,8 +31,4 @@ test.describe("Advert Type Testleri", () => {
     expect(body.title).toBe("Sale");
     expect(body.builtIn).toBe(true);
   });
-
-
-
-
 });

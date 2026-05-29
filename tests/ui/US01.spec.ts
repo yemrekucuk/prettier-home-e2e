@@ -210,7 +210,7 @@ test.describe('US01 - Register', () => {
             data.phone,
             data.email,
             numericOnlyPassword,
-            registerData.confirmPassword
+            numericOnlyPassword
         );
 
         await expect(registerPage.registerButton).toBeDisabled();

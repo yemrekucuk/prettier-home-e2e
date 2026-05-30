@@ -15,6 +15,6 @@ export const createRegisterTestData = () => ({
 });
 
 export const endpoints = {
-    register:
-        `${process.env.API_BASE_URL}/users/register`
+    register: `${process.env.API_BASE_URL}/users/register`,
+    login: `${process.env.API_BASE_URL}/users/login`   
 };

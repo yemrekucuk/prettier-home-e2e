@@ -1,10 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { apiRegisterData } from '../../test-data/apiRegisterData';
-import { createRegisterTestData, endpoints } from '../../helpers/apiHelper';
 import { registerUser } from '../../helpers/registerUserHelper';
 import { registerData } from '../../utils/registerData';
-import { request } from 'node:http';
 
+test.describe('US01 Register API', async () => {
 test('US01-TC01-API-Should register user successfully with valid data', async ({ request }) => {
 
     const { response, user } = await registerUser(request);
@@ -63,7 +61,6 @@ test('US01-TC03-API-RegisterWithoutLastName', async ({ request }) => {
 
     expect(response.status()).toBe(400);
     const body = await response.json();
-    console.log(body);
     expect(body.lastName).toMatch(/cannot be blank|between 1 and 50/);
 });
 
@@ -189,3 +186,20 @@ test('US01-TC10-API-RegisterWithoutNumberInPassword', async ({ request }) => {
     
 });
 
+
+test('US01-TC11-API-RegisterWithNumericPasswordOnly', async ({ request }) => {
+
+    const numericPassword   = '123456789' ;
+
+    const {response} = await registerUser( request, {
+        password: numericPassword,
+        confirmPassword: numericPassword
+    });
+
+    expect(response.status()).toBe(400);
+    const body = await response.json();
+    expect(body.password).toContain('one letter, one number, and one special character');
+    
+});
+
+});

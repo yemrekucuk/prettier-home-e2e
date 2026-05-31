@@ -38,13 +38,13 @@ export const PROPERTIES_DATA: FilterOptions = {
 };
 
 export const testData = {
-   date: "2026-05-20",
+   date: "2026-06-20",
    time: "14:00",
 };
  
 export const tourRequestData = {
   propertyName: "Luxury Villa With Pool",
-  updatedDate: "2025-05-20",
+  updatedDate: "2025-07-20",
   updatedTime: "10:00",
 };
 
@@ -55,7 +55,7 @@ export const tourRequestData = {
  */
 export const TOUR_DATA = {
   valid: {
-    date: DateUtils.future(5),
+    date: DateUtils.future(6),
     time: "14:00",
   },
 };

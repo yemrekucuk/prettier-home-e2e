@@ -1,7 +1,7 @@
 import { test as base } from "@playwright/test";
 import { PropertiesPage } from "../pages/main/PropertiesPage";
 import { LoginPage } from "../pages/main/LoginPage";
-import { ListingDetailsPage} from "../pages/main/ListingDetailsPage";
+import { ListingDetailsPage } from "../pages/main/ListingDetailsPage";
 import { MyTourRequestsPage } from "../pages/main/MyTourRequestsPage";
 
 // 1. Tüm sayfaların tiplerini buraya ekliyoruz
@@ -18,6 +18,7 @@ export const test = base.extend<PropertiesFixtures>({
     await use(new LoginPage(page));
   },
   propertiesPage: async ({ page }, use) => {
+    await page.goto("https://prettierhome.deployedprojects.xyz/");
     await use(new PropertiesPage(page));
   },
   listingDetailsPage: async ({ page }, use) => {

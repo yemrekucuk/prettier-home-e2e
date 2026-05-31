@@ -1,7 +1,6 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { NavbarPage } from "./NavbarPage";
 import { FilterOptions } from "../../interfaces/filterOptions.interface";
-import { WaitUtils } from "../../utils/WaitUtils";
 import searchData from "../../test-data/SearchData.json"
 
 export class PropertiesPage extends NavbarPage {
@@ -64,65 +63,82 @@ export class PropertiesPage extends NavbarPage {
   get myTourRequestsPropertiesLink() {
     return this.page.getByRole("link", { name: "My Tour Requests" });
   }
+    get filterSearchButton() {
+    return this.page.getByRole('button', { name: 'Search' });
+  }
+  get advertImage() {
+  return this.page.locator('span').nth(1);
+}
+
+get detailsHeading() {
+  return this.page.getByRole('heading', { name: 'DETAILS' });
+}
+
+get locationHeading() {
+  return this.page.getByRole('heading', { name: 'LOCATION' });
+}
+
+get descriptionHeading() {
+  return this.page.getByRole('heading', { name: 'Description' });
+}
+get saleButton() {
+  return this.page.getByRole('button', { name: 'SALE' });
+}
+
+get tourDateInput() {
+  return this.page.getByRole('textbox', { name: 'Tour Date' });
+}
+
+get tourTimeSelect() {
+  return this.page.getByLabel('Tour Time');
+}
+
+get submitTourButton() {
+  return this.page.getByRole('button', { name: 'Submit a tour request' });
+}
+
+get loginForTourText() {
+  return this.page.getByText('Log in for tour requestFound');
+}
+
+get createOneNowText() {
+  return this.page.getByText("Don't have an account? Create");
+}
+get searchBoxInput() {
+  return this.page.getByRole('searchbox', { name: 'Search' });
+}
+get searchButtonInput() {
+  return this.page.locator('div.search-input-wrapper button');
+}
+get createOneNowLink() {
+  return this.page.getByText('Create one now!');
+}
 
   // ---------------------------
   // FILTER LOGIC
   // ---------------------------
 
   async filterSearch(options: FilterOptions) {
-    // 1) Search keyword
-    if (options.searchInput) {
-      await this.searchInput.fill(options.searchInput);
-    }
+    await this.searchInput.fill(options.searchInput || "");
+    await this.minPriceInput.fill(options.minPrice || "");
+    await this.maxPriceInput.fill(options.maxPrice || "");
 
-    // 2) Price Range
-    if (options.minPrice !== undefined) {
-      await this.minPriceInput.fill(options.minPrice);
-    }
+    await this.advertTypeSelect.selectOption({ label: options.advertType });
+    await this.categorySelect.selectOption({ label: options.category });
+    await this.countrySelect.selectOption({ label: options.country });
 
-    if (options.maxPrice !== undefined) {
-      await this.maxPriceInput.fill(options.maxPrice);
-    }
+    // CITY — direkt seç 
+    await this.citySelect.selectOption({ label: options.city });
 
-    // 3) Advert Type
-    if (options.advertType) {
-      await this.advertTypeSelect.selectOption(options.advertType);
-    }
+    // DISTRICT — direkt option bekle 
+    await this.page.waitForSelector(
+      `select#dist option:has-text("${options.district}")`,
+      { state: "attached", timeout: 10000 },
+    );
 
-    // 4) Category
-    if (options.category) {
-      await this.categorySelect.selectOption(options.category);
-    }
+    await this.districtSelect.selectOption({ label: options.district });
 
-    // 5) Country
-    if (options.country) {
-      await this.countrySelect.selectOption(options.country);
-    }
-
-    //  6) CITY DROPDOWN YÜKLENMESİNİ BEKLE
-    await this.citySelect
-      .locator('option:not([value="-1"])')
-      .first()
-      .waitFor({ state: "attached", timeout: 10000 });
-
-    // 7) City
-    if (options.city) {
-      await this.citySelect.selectOption(options.city);
-    }
-
-    // 8) DISTRICT DROPDOWN YÜKLENMESİNİ BEKLE
-    await this.districtSelect
-      .locator('option:not([value="-1"])')
-      .first()
-      .waitFor({ state: "attached", timeout: 10000 });
-
-    // 9) District
-    if (options.district) {
-      await this.districtSelect.selectOption({ label: options.district });
-    }
-
-    // 10) Search Button
-    await this.searchButtonProperties.waitFor({ state: "visible" });
+    await this.searchButtonProperties.click();
   }
 
   // ---------------------------

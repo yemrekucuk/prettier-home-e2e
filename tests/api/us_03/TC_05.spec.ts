@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { test, expect } from "../../../fixtures/api-auth-fixture";
+import { test, expect } from "../../../fixtures/api-auth-customer-fixture";
 import { APIRequestContext } from "@playwright/test";
 
 /**

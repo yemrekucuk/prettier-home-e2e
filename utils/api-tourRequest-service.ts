@@ -6,8 +6,7 @@ import {
 
 export class TourRequestService {
   private request: APIRequestContext;
-  private baseUrl =
-    "https://prettierhome-api.deployedprojects.xyz/tour-requests";
+  private baseUrl = `${process.env.API_URL}/tour-requests`;
 
   constructor(request: APIRequestContext) {
     this.request = request;
@@ -30,7 +29,10 @@ export class TourRequestService {
     return { dynamicDate, dynamicTime };
   }
 
-  async createTourRequest(token: string, advertId: number): Promise<number> {
+  async createTourRequest(
+    token: string,
+    advertId: number,
+  ): Promise<{ id: number; date: string; time: string }> {
     const { dynamicDate, dynamicTime } = this.generateDynamicDateTime();
 
     const payload: TourRequestPayload = {
@@ -53,6 +55,11 @@ export class TourRequestService {
     }
 
     const responseBody: TourRequestResponse = await response.json();
-    return responseBody.id;
+
+    return {
+      id: responseBody.id,
+      date: dynamicDate,
+      time: dynamicTime,
+    };
   }
 }

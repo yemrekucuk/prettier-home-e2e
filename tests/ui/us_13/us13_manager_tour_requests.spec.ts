@@ -13,7 +13,9 @@ test.describe.serial("US_13 - Manager Tour Requests Validation", () => {
   let managerToken: string;
   let customerToken: string;
   let createdTourRequestId: number;
-  const TEST_ADVERT_ID = 63;
+  let createdTourDate: string;
+  let createdTourTime: string;
+  const TEST_ADVERT_ID = Number(process.env.TEST_ADVERT_ID) || 63;
 
   test.beforeAll(async ({ request }) => {
     managerToken = await getToken(
@@ -31,10 +33,21 @@ test.describe.serial("US_13 - Manager Tour Requests Validation", () => {
 
   test.beforeEach(async ({ page, request }) => {
     const tourService = new TourRequestService(request);
-    createdTourRequestId = await tourService.createTourRequest(
+    const tourData = await tourService.createTourRequest(
       customerToken,
       TEST_ADVERT_ID,
     );
+
+    createdTourRequestId = tourData.id;
+
+    const [year, month, day] = tourData.date.split("-");
+    createdTourDate = `${day}.${month}.${year}`;
+
+    let [hourStr, minute] = tourData.time.split(":");
+    let hourNum = parseInt(hourStr, 10);
+    const ampm = hourNum >= 12 ? "PM" : "AM";
+    hourNum = hourNum % 12 || 12;
+    createdTourTime = `${hourNum}:${minute} ${ampm}`;
 
     loginPage = new LoginPage(page);
     controlPanelPage = new ControlPanelPage(page);
@@ -50,23 +63,28 @@ test.describe.serial("US_13 - Manager Tour Requests Validation", () => {
 
   test.afterEach(async ({ request }) => {
     if (!createdTourRequestId) return;
-
     const apiBase = (process.env.API_URL ?? "").replace(/\/+$/, "");
 
-    await request.get(
-      `${apiBase}/tour-requests/${createdTourRequestId}/decline`,
-      { headers: { Authorization: `Bearer ${managerToken}` } },
-    );
-
-    const deleteResponse = await request.delete(
-      `${apiBase}/tour-requests/${createdTourRequestId}`,
-      { headers: { Authorization: `Bearer ${managerToken}` } },
-    );
-
-    if (!deleteResponse.ok()) {
-      console.warn(
-        `⚠️ Cleanup FAILED — ID: ${createdTourRequestId} | Status: ${deleteResponse.status()} | Test: ${test.info().title}`,
+    try {
+      const declineResponse = await request.get(
+        `${apiBase}/tour-requests/${createdTourRequestId}/decline`,
+        { headers: { Authorization: `Bearer ${managerToken}` } },
       );
+
+      if (declineResponse.ok() || declineResponse.status() === 409) {
+        const deleteResponse = await request.delete(
+          `${apiBase}/tour-requests/${createdTourRequestId}`,
+          { headers: { Authorization: `Bearer ${managerToken}` } },
+        );
+
+        if (!deleteResponse.ok()) {
+          console.warn(
+            `⚠️ UI Cleanup FAILED — ID: ${createdTourRequestId} | Status: ${deleteResponse.status()}`,
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Teardown error: ", error);
     }
   });
 
@@ -77,30 +95,34 @@ test.describe.serial("US_13 - Manager Tour Requests Validation", () => {
   });
 
   test("TC_02 - Managerin statusu beklemede olan randevu isteklerini reddedebilmeli", async () => {
-    await expect(myTourRequestsPage.getPendingRows().first()).toBeVisible({
-      timeout: 15000,
-    });
-    await myTourRequestsPage.managePendingRequest("reject");
+    await myTourRequestsPage.manageRequestByDateTime(
+      createdTourDate,
+      createdTourTime,
+      "reject",
+    );
     await expect(myTourRequestsPage.toastMessage).toBeVisible({
       timeout: 5000,
     });
   });
 
   test("TC_03 - Managerin statusu beklemede olan randevu isteklerini kabul edebilmeli", async () => {
-    await expect(myTourRequestsPage.getPendingRows().first()).toBeVisible({
-      timeout: 15000,
-    });
-    await myTourRequestsPage.managePendingRequest("approve");
+    await myTourRequestsPage.manageRequestByDateTime(
+      createdTourDate,
+      createdTourTime,
+      "approve",
+    );
     await expect(myTourRequestsPage.toastMessage).toBeVisible({
       timeout: 5000,
     });
   });
 
   test("TC_05 - Managerin randevu talebini yanitlarken islemden vazgecebilmesi", async () => {
-    await expect(myTourRequestsPage.getPendingRows().first()).toBeVisible({
-      timeout: 15000,
-    });
-    await myTourRequestsPage.managePendingRequest("reject", "cancel");
+    await myTourRequestsPage.manageRequestByDateTime(
+      createdTourDate,
+      createdTourTime,
+      "reject",
+      "cancel",
+    );
     await expect(myTourRequestsPage.confirmPopup).toBeHidden();
     await expect(myTourRequestsPage.toastMessage).toBeHidden();
   });

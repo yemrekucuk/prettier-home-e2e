@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+ import * as fs from "fs";
 
 test.describe("US06 - Manager Advert CRUD", () => {
   let token: string;
@@ -53,6 +54,10 @@ test.describe("US06 - Manager Advert CRUD", () => {
     advertId = body.id;
 
     expect(advertId).toBeTruthy();
+
+    fs.mkdirSync("temp", { recursive: true });
+    fs.writeFileSync("temp/advert.json", JSON.stringify({ advertId }));
+
   });
 
   test("Manager oluşturduğu ilanı görüntüleyebilmeli", async ({ request }) => {

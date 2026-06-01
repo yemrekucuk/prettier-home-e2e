@@ -19,10 +19,6 @@ test.describe("US_14: Manager Randevu Yönetimi", () => {
     await firstAdvert.click();
 
     const listingDetailsPage = new ListingDetailsPage(page);
-    try {
-      await listingDetailsPage.scheduleATour("2027-06-20", "15:00");
-    } catch (error) {
-      console.log('Uyarı: Başarı mesajı alınamadı.');
-    }
+    await listingDetailsPage.scheduleATour("2027-06-20", "15:00");
   });
 });

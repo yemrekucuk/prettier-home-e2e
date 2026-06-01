@@ -1,0 +1,337 @@
+{
+  "info": {
+    "name": "US-14 and US-19 API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://prettierhome-api.deployedprojects.xyz",
+      "type": "string"
+    },
+    {
+      "key": "manager_email",
+      "value": "manager@test.com",
+      "type": "string"
+    },
+    {
+      "key": "manager_password",
+      "value": "Manager123!",
+      "type": "string"
+    },
+    {
+      "key": "manager_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "advert_id",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "US-14 Manager Tour Request",
+      "item": [
+        {
+          "name": "Login as Manager",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.collectionVariables.set(\"manager_token\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{manager_email}}\",\n  \"password\": \"{{manager_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "TC_01 Create Tour Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{manager_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tourDate\": \"2027-06-20\",\n  \"tourTime\": {\n    \"hour\": 15,\n    \"minute\": 0\n  },\n  \"advertId\": {{advert_id}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tour-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tour-requests"
+              ]
+            }
+          }
+        },
+        {
+          "name": "TC_02 Get Tour Requests (Guest)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Verify created tour request is in the list\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.content).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{manager_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/tour-requests/auth/guest",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tour-requests",
+                "auth",
+                "guest"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "US-19 Contact Form Validations",
+      "item": [
+        {
+          "name": "TC_01 Positive Scenario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Ali\",\n  \"lastName\": \"Veli\",\n  \"email\": \"ali.veli@gmail.com\",\n  \"message\": \"Proje harika görünüyor!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contact-messages/save",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contact-messages",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "TC_02 Negative Scenario - First Name Boundary",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code should not be 200\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 422, 500]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"A\",\n  \"lastName\": \"Veli\",\n  \"email\": \"ali.veli@gmail.com\",\n  \"message\": \"Test mesajı.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contact-messages/save",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contact-messages",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "TC_03 Negative Scenario - Last Name Boundary",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code should not be 200\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 422, 500]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Ali\",\n  \"lastName\": \"B\",\n  \"email\": \"ali.veli@gmail.com\",\n  \"message\": \"Test mesajı.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contact-messages/save",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contact-messages",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "TC_04 Negative Scenario - Email Format",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code should not be 200\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 422, 500]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Ali\",\n  \"lastName\": \"Veli\",\n  \"email\": \"techproeducation\",\n  \"message\": \"Test mesajı.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contact-messages/save",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contact-messages",
+                "save"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

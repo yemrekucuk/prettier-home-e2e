@@ -164,17 +164,23 @@ export class MyTourRequestsPage extends NavbarPage {
       hasText: /(PENDING|BEKLEMEDE|EN ATTENTE|AUSSTEHEND|PENDIENTE)/i,
     });
   }
-  async managePendingRequest(
+
+  async manageRequestByDateTime(
+    date: string,
+    time: string,
     action: "approve" | "reject",
     confirmAction: "accept" | "cancel" = "accept",
   ) {
-    const firstPendingRow = this.getPendingRows().first();
-    await WaitUtils.waitForVisible(firstPendingRow);
+    const targetRow = this.visibleRequestRows
+      .filter({ hasText: date })
+      .filter({ hasText: time });
+
+    await targetRow.waitFor({ state: "visible", timeout: 15000 });
 
     if (action === "reject") {
-      await firstPendingRow.locator("button").first().click();
+      await targetRow.locator("button").first().click();
     } else if (action === "approve") {
-      await firstPendingRow.locator("button").nth(1).click();
+      await targetRow.locator("button").nth(1).click();
     }
 
     const confirmPopup = this.confirmPopup;

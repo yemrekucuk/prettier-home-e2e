@@ -37,7 +37,6 @@ test.describe("US_13 — Tour Requests Tablo Doğrulamasi", () => {
       WHERE table_name = 'tour_requests'
       ORDER BY ordinal_position
     `);
-    console.log("Gerçek kolon yapisi:", result.rows);
 
     const columns = result.rows.map((r) => r.column_name);
 
@@ -54,11 +53,10 @@ test.describe("US_13 — Tour Requests Tablo Doğrulamasi", () => {
     expect(Number(result.rows[0].count)).toBeGreaterThan(0);
   });
 
-  test("Tüm status değerleri geçerli olmali (PENDING, APPROVED, DECLINED)", async () => {
+  test("Tüm status değerleri geçerli olmali (0: PENDING, 1: APPROVED, 2: DECLINED)", async () => {
     const result = await dbClient.query(`
       SELECT DISTINCT status FROM tour_requests
     `);
-    console.log("DB'deki status değerleri:", result.rows);
 
     const validStatuses = [0, 1, 2];
     for (const row of result.rows) {

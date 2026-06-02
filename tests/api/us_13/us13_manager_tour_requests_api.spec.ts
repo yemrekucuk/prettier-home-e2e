@@ -2,12 +2,11 @@ import { test, expect } from "@playwright/test";
 import { TourRequestService } from "../../../utils/api-tourRequest-service";
 import { getToken } from "../../../utils/api-auth-utils";
 
-
 test.describe("US_13 - Manager Tour Requests API", () => {
   let managerToken: string;
   let customerToken: string;
   let createdTourRequestId: number;
-  const testAdvertId = 63;
+  const TEST_ADVERT_ID = Number(process.env.TEST_ADVERT_ID) || 63;
 
   test.beforeAll(async ({ request }) => {
     managerToken = await getToken(
@@ -25,20 +24,32 @@ test.describe("US_13 - Manager Tour Requests API", () => {
 
   test.beforeEach(async ({ request }) => {
     const tourService = new TourRequestService(request);
-    createdTourRequestId = await tourService.createTourRequest(
+    const tourData = await tourService.createTourRequest(
       customerToken,
-      testAdvertId,
+      TEST_ADVERT_ID,
     );
+    createdTourRequestId = tourData.id;
   });
 
   test.afterEach(async ({ request }) => {
-    if (createdTourRequestId) {
-      await request.delete(
-        `${process.env.API_URL}/tour-requests/${createdTourRequestId}`,
-        {
-          headers: { Authorization: `Bearer ${managerToken}` },
-        },
-      );
+    if (!createdTourRequestId) return;
+
+    await request.get(
+      `${process.env.API_URL}/tour-requests/${createdTourRequestId}/decline`,
+      {
+        headers: { Authorization: `Bearer ${managerToken}` },
+      },
+    );
+
+    const deleteResponse = await request.delete(
+      `${process.env.API_URL}/tour-requests/${createdTourRequestId}`,
+      {
+        headers: { Authorization: `Bearer ${managerToken}` },
+      },
+    );
+
+    if (!deleteResponse.ok()) {
+      console.warn(`⚠️ API Cleanup FAILED — ID: ${createdTourRequestId}`);
     }
   });
 

@@ -1,4 +1,4 @@
-import { test, expect } from '../../../fixtures/api-auth-fixture';
+import { test, expect } from '../../../fixtures/api-auth-customer-fixture';
 import { IAdvertTypeResponse } from '../../../interfaces/api-advertType.interface';
 import postData from '../../../test-data/Advert-type-Post-Payload.json'
 import putData from "../../../test-data/Advert-type-Put-Payload.json";

@@ -6,8 +6,8 @@ export async function getPHCustomerToken(request: APIRequestContext) {
   const baseUrl = (process.env.API_URL ?? "").replace(/\/+$/, "");
   const response = await request.post(`${baseUrl}/users/login`, {
     data: {
-      email: process.env.MANAGER_EMAIL,
-      password: process.env.MANAGER_PASSWORD,
+      email: process.env.CUSTOMER_EMAIL,
+      password: process.env.CUSTOMER_PASSWORD,
     },
   });
   const responseData = await response.json();

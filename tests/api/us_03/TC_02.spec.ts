@@ -1,4 +1,4 @@
-import { test, expect } from "../../../fixtures/api-auth-fixture";
+import { test, expect } from "../../../fixtures/api-auth-customer-fixture";
 import { UserService } from "../../../utils/api-user-service";
 
 /**

@@ -5,8 +5,8 @@ dotenv.config();
 export async function getPHCustomerToken(request: APIRequestContext) {
   const response = await request.post(process.env.API_URL + "/users/login", {
     data: {
-      email: process.env.CUSTOMER_EMAIL,
-      password: process.env.CUSTOMER_PASSWORD,
+      email: process.env.MANAGER_EMAIL,
+      password: process.env.MANAGER_PASSWORD,
     },
   });
 

@@ -16,7 +16,8 @@ import { PROPERTIES_DATA } from "../../../test-data/TestDataProperties";
     //1)Doldurulmasi gereken alanlari tesdatadaki verilerimizi gondererek dolduruyoruz=>Filter search methodunu kullandim
     await propertiesPage.filterSearch(PROPERTIES_DATA);
     //2)search =>bu methodda hem bekleme hem visible hem click fonksiyonu var
-    await propertiesPage.clickSearch();
+    //await propertiesPage.clickSearch();
+    await propertiesPage.searchButtonProperties.click();
     //3)Karsimiza gelen listeden ilk ilana tikliyoruz(cunku bizim ozel filtreledigimiz ilan geliyor sonuc olarak)
     await propertiesPage.listingCards.first().click();
     //4)Dogrulamalri yapiyoruz

@@ -18,6 +18,7 @@ export class MyTourRequestsPage extends NavbarPage {
   readonly myRequestTableFirstRow: Locator;
   readonly myRequestTableFirstRowAdvertName: Locator;
   readonly lastCreatedTourRequestDeleteButton: Locator;
+  readonly lastCreatedTourRequestEditButton: Locator;
   readonly deletePopupYesButton: Locator;
   readonly deletePopupNoButton: Locator;
   readonly deleteSuccessMessage: Locator;
@@ -33,6 +34,9 @@ export class MyTourRequestsPage extends NavbarPage {
     this.dateInput = page.locator('input[name="tourDate"]');
     this.timeSelect = page.locator('select[name="tourTime"]');
     this.updateButton = page.getByRole("button", { name: "UPDATE" });
+    this.lastCreatedTourRequestEditButton = page
+      .locator(".getproperty button")
+      .nth(-2);
 
     this.myResponsesTab = page.locator(
       "button[data-rr-ui-event-key='response']",
@@ -72,7 +76,7 @@ export class MyTourRequestsPage extends NavbarPage {
   // --------------------------
 
   private getRowByPropertyName(propertyName: string) {
-    return this.requestRows.filter({ hasText: propertyName });
+    return this.page.locator(".getproperty", { hasText: propertyName });
   }
 
   private getEditButton(row: Locator) {
@@ -86,6 +90,9 @@ export class MyTourRequestsPage extends NavbarPage {
       has: row.locator('svg path[d^="M19 6v14"]'),
     });
   }
+  async expectToast(text: string) {
+    await expect(this.page.locator(".p-toast")).toContainText(text);
+  }
 
   // --------------------------
   // ACTIONS
@@ -94,26 +101,28 @@ export class MyTourRequestsPage extends NavbarPage {
   async deleteRequest(propertyName: string) {
     const row = this.getRowByPropertyName(propertyName).first();
 
-    await WaitUtils.waitForVisible(row);
+    // Row zaten görünür olana kadar auto-wait yapar
+    await expect(row).toBeVisible();
 
     const deleteButton = this.getDeleteButton(row);
-    await WaitUtils.waitForVisible(deleteButton);
+    await expect(deleteButton).toBeVisible();
 
     await deleteButton.click();
 
-    await this.page.locator(".p-confirm-popup").waitFor({ state: "visible" });
+    // Confirm popup
+    await expect(this.page.locator(".p-confirm-popup")).toBeVisible();
     await this.page.getByRole("button", { name: "Yes" }).click();
 
-    await WaitUtils.waitForToast(this.page, "Tour request deleted");
+    // Toast (en stabil yöntem)
+    await expect(this.page.locator(".p-toast")).toContainText("deleted");
   }
 
   async clickEditRequest(propertyName: string) {
     const row = this.getRowByPropertyName(propertyName).first();
-
-    await WaitUtils.waitForVisible(row);
+    await expect(row).toBeVisible();
 
     const editButton = this.getEditButton(row);
-    await WaitUtils.waitForVisible(editButton);
+    await expect(editButton).toBeVisible();
 
     await editButton.click();
   }
@@ -128,20 +137,16 @@ export class MyTourRequestsPage extends NavbarPage {
     await this.updateButton.click();
   }
 
-  // --------------------------
-  // GETTERS
-  // --------------------------
-
   async getStatusText(propertyName: string) {
     const row = this.getRowByPropertyName(propertyName).first();
-    await WaitUtils.waitForVisible(row);
+    await expect(row).toBeVisible();
 
     return row.locator(".text p").nth(2).innerText();
   }
 
   async getTourDateTime(propertyName: string) {
     const row = this.getRowByPropertyName(propertyName).first();
-    await WaitUtils.waitForVisible(row);
+    await expect(row).toBeVisible();
 
     const date = await row.locator(".tour-date").innerText();
     const time = await row.locator(".tour-time").innerText();
@@ -159,17 +164,23 @@ export class MyTourRequestsPage extends NavbarPage {
       hasText: /(PENDING|BEKLEMEDE|EN ATTENTE|AUSSTEHEND|PENDIENTE)/i,
     });
   }
-  async managePendingRequest(
+
+  async manageRequestByDateTime(
+    date: string,
+    time: string,
     action: "approve" | "reject",
     confirmAction: "accept" | "cancel" = "accept",
   ) {
-    const firstPendingRow = this.getPendingRows().first();
-    await WaitUtils.waitForVisible(firstPendingRow);
+    const targetRow = this.visibleRequestRows
+      .filter({ hasText: date })
+      .filter({ hasText: time });
+
+    await targetRow.waitFor({ state: "visible", timeout: 15000 });
 
     if (action === "reject") {
-      await firstPendingRow.locator("button").first().click();
+      await targetRow.locator("button").first().click();
     } else if (action === "approve") {
-      await firstPendingRow.locator("button").nth(1).click();
+      await targetRow.locator("button").nth(1).click();
     }
 
     const confirmPopup = this.confirmPopup;
@@ -204,5 +215,11 @@ export class MyTourRequestsPage extends NavbarPage {
   async deleteMessageVisibleTest() {
     await WaitUtils.waitForVisible(this.deleteSuccessMessage);
     expect(this.deleteSuccessMessage).toBeVisible();
+  }
+  async updateLastCreatedTourRequest(date: string, time: string) {
+    await this.lastCreatedTourRequestEditButton.click();
+    await this.dateInput.fill(date);
+    await this.timeSelect.selectOption(time);
+    await this.updateButton.click();
   }
 }

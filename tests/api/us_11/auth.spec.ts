@@ -1,5 +1,5 @@
 import expected from "../../../test-data/auth-us11-customer-expected.json";
-import { test, expect } from "../../../fixtures/api-auth-fixture";
+import { test, expect } from "../../../fixtures/api-auth-customer-fixture";
 
 test("Token ve kullanici doğrulama", async ({ authorizedRequest }) => {
   const response = await authorizedRequest.get("/users/auth");

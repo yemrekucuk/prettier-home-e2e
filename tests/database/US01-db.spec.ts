@@ -1,8 +1,8 @@
 import { test, expect } from '../../fixtures/db-us01.Fixture';
 
+test.describe('US01 Register Database Tests', () => {
 test('US01-TC01-DB-Users table contains required columns', async ({ postgresClient }) => {
     // TC01 -> Users tablosunda gerekli kolonlar mevcut mu?
-
     const result = await postgresClient.query(`
         SELECT column_name
         FROM information_schema.columns
@@ -28,6 +28,9 @@ test('US01-TC02-DB-Users should not contain records with empty first name', asyn
         OR TRIM(first_name) = ''
     `);
     expect(result.rows.length).toBe(0);
+
+    
+
 });
 
 test('US01-TC03-DB-Users should not contain records with empty last name', async ({ postgresClient }) => {
@@ -86,4 +89,4 @@ test('US01-TC07-DB-Users should not contain records with empty password hash', a
     expect(result.rows.length).toBe(0);
 });
 
-
+});

@@ -4,6 +4,7 @@ import { ControlPanelPage } from "../../../pages/dashboard/ControlPanelPage";
 import { MyTourRequestsPage } from "../../../pages/main/MyTourRequestsPage";
 import { TourRequestService } from "../../../utils/api-tourRequest-service";
 import { getToken } from "../../../utils/api-auth-utils";
+import advertData from '../../../test-data/us_13/advertData.json';
 
 test.describe.serial("US_13 - Manager Tour Requests Validation", () => {
   let loginPage: LoginPage;
@@ -15,7 +16,7 @@ test.describe.serial("US_13 - Manager Tour Requests Validation", () => {
   let createdTourRequestId: number;
   let createdTourDate: string;
   let createdTourTime: string;
-  const TEST_ADVERT_ID = Number(process.env.TEST_ADVERT_ID) || 63;
+  const TEST_ADVERT_ID = advertData.testAdvertId;
 
   test.beforeAll(async ({ request }) => {
     managerToken = await getToken(

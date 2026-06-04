@@ -16,10 +16,6 @@ test.describe("US_14: Manager Randevu Yönetimi", () => {
     await page.goto("https://prettierhome.deployedprojects.xyz/my-tour-requests", { waitUntil: "load" });
     const myTourRequestsPage = new MyTourRequestsPage(page);
     
-    try {
-        await myTourRequestsPage.lastCreatedTourRequestVisibleTest();
-    } catch (error) {
-        console.log('Bilgi: Listede hiç randevu bulunamadı.');
-    }
+    await myTourRequestsPage.lastCreatedTourRequestVisibleTest();
   });
 });

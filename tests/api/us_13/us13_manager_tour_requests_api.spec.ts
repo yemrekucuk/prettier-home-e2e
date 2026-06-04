@@ -1,12 +1,13 @@
 import { test, expect } from "@playwright/test";
 import { TourRequestService } from "../../../utils/api-tourRequest-service";
 import { getToken } from "../../../utils/api-auth-utils";
+import advertData from '../../../test-data/us_13/advertData.json';
 
 test.describe("US_13 - Manager Tour Requests API", () => {
   let managerToken: string;
   let customerToken: string;
   let createdTourRequestId: number;
-  const TEST_ADVERT_ID = Number(process.env.TEST_ADVERT_ID) || 63;
+  const TEST_ADVERT_ID = advertData.testAdvertId;
 
   test.beforeAll(async ({ request }) => {
     managerToken = await getToken(

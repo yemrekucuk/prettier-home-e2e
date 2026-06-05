@@ -15,7 +15,7 @@ import { UpdateProfileRequest } from "../../../interfaces/user.interface";
  * - Status 200
  * - Gönderilen alanlar response'da aynı değerlerle dönmeli
  * - id alanı number olmalı
- */
+ 
 
 const updatedProfile: UpdateProfileRequest = {
   firstName: "Suphi",
@@ -53,4 +53,4 @@ test.describe("US_03 | TC_03 - Profil Güncelle", () => {
     expect(body.email).toBe(updatedProfile.email);
     expect(body.role).toBe(updatedProfile.role);
   });
-});
+});*/

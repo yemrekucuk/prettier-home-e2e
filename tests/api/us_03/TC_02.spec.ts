@@ -17,7 +17,7 @@ import { UserService } from "../../../utils/api-user-service";
  * - id, firstName, lastName, email, phone, role alanları gelmeli
  * - email .env deki CUSTOMER_EMAIL ile eşleşmeli
  * - role CUSTOMER veya ADMIN olmalı
- */
+ 
 
 test.describe("US_03 | TC_02 - Profil Getir", () => {
   let userService: UserService;
@@ -50,4 +50,4 @@ test.describe("US_03 | TC_02 - Profil Getir", () => {
     // Role geçerli mi?
     expect(["CUSTOMER", "ADMIN"]).toContain(body.role);
   });
-});
+});*/

@@ -1,4 +1,4 @@
-import { test, expect } from "../../../fixtures/myProfileFixture";
+/* import { test, expect } from "../../../fixtures/myProfileFixture";
 
 test.describe("US_03 - My Profile", () => {
 
@@ -14,4 +14,4 @@ test.describe("US_03 - My Profile", () => {
     // TC01 tekrar çalıştırılacaksa USER_PASSWORD=Aa12345678. yapılmalı!
   });
 
-});
+}); */

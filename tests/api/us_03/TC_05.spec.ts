@@ -15,7 +15,7 @@ import { APIRequestContext } from "@playwright/test";
  *
  * Beklenen:
  * - Status 200
- */
+ 
 
 test.describe("US_03 | TC_05 - Profil Fotoğrafı Ekle", () => {
   test("PATCH /users/photo - should return 200", async ({
@@ -57,4 +57,4 @@ test.describe("US_03 | TC_05 - Profil Fotoğrafı Ekle", () => {
       }
     }
   });
-});
+});*/

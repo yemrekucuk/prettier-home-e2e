@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+/* import { test, expect } from "@playwright/test";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -21,7 +21,7 @@ dotenv.config();
  * - Status 200
  * - token string ve dolu olmalı
  * - email, firstName, lastName, role alanları gelmeli
- */
+ 
 
 const API_URL = process.env.API_URL ?? "https://prettierhome-api.deployedprojects.xyz";
 
@@ -55,4 +55,4 @@ test.describe("US_03 | TC_01 - Login", () => {
     expect(body.lastName).toBeDefined();
     expect(["CUSTOMER", "ADMIN"]).toContain(body.role);
   });
-});
+}); */

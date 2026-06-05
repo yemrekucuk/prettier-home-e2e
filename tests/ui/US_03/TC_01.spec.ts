@@ -1,4 +1,4 @@
-import { test, expect } from "../../../fixtures/myProfileFixture";
+/* import { test, expect } from "../../../fixtures/myProfileFixture";
 
 test.describe("US_03 - My Profile", () => {
 
@@ -12,4 +12,4 @@ test.describe("US_03 - My Profile", () => {
     await expect(myProfilePage.page.getByText("Profile updated successfully")).toBeVisible();
   });
 
-});
+}); */

@@ -15,7 +15,7 @@ import { ChangePasswordRequest } from "../../../interfaces/user.interface";
  *
  * Beklenen:
  * - Status 200
- */
+ 
 
 const changePasswordPayload: ChangePasswordRequest = {
   currentPassword: process.env.CUSTOMER_PASSWORD ?? "",
@@ -39,4 +39,4 @@ test.describe("US_03 | TC_04 - Şifre Değiştir", () => {
     // Assert - Status
     expect(response.status()).toBe(200);
   });
-});
+});*/

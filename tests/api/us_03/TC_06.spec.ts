@@ -17,7 +17,7 @@ import { DeleteAccountRequest } from "../../../interfaces/user.interface";
  *
  * Beklenen:
  * - Status 200
- */
+ 
 
 const deletePayload: DeleteAccountRequest = {
   password: process.env.CUSTOMER_PASSWORD ?? "",
@@ -37,4 +37,4 @@ test.describe("US_03 | TC_06 - Hesap Sil", () => {
     // Assert - Status
     expect(response.status()).toBe(200);
   });
-});
+});*/

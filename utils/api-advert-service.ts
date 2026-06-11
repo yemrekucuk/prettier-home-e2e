@@ -8,6 +8,31 @@ export class AdvertService {
   }
 
   /**
+   * POST | Yeni ilan oluştur
+   */
+  async createAdvert(payload: Record<string, unknown>) {
+    return await this.request.post("/adverts", {
+      data: payload,
+    });
+  }
+
+  /**
+   * PUT | Mevcut ilanı güncelle
+   */
+  async updateAdvert(id: number, payload: Record<string, unknown>) {
+    return await this.request.put(`/adverts/${id}`, {
+      data: payload,
+    });
+  }
+
+  /**
+   * DELETE | İlan sil
+   */
+  async deleteAdvert(id: number) {
+    return await this.request.delete(`/adverts/${id}`);
+  }
+
+  /**
    * GET | Tüm ilanları getir (search endpoint)
    */
   async getAllAdverts(page = 0, size = 20, sort = "category.id", type = "asc") {
@@ -31,7 +56,6 @@ export class AdvertService {
   async getAdvertById(id: number) {
     return await this.request.get(`/adverts/${id}/auth`);
   }
-  
 
   async searchAdverts(params: Record<string, any>) {
     const queryString = new URLSearchParams(params).toString();
